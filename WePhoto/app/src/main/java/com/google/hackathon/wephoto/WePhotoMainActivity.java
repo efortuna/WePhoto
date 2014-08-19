@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import com.google.android.gms.drive.query.Filter;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -16,15 +17,21 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.query.Filters;
+import com.google.android.gms.drive.query.Query;
+import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.drive.widget.DataBufferAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Future;
 
 public class WePhotoMainActivity extends FragmentActivity implements
@@ -242,19 +249,27 @@ public class WePhotoMainActivity extends FragmentActivity implements
      * List contents of the root drive folder and append them to resultsAdaptor.
      */
     public void listRootFolderContents(final DataBufferAdapter<Metadata> resultsAdaptor) {
-        listDriveFolderContents(
-                Drive.DriveApi.getRootFolder(mGoogleApiClient).getDriveId(), resultsAdaptor);
+        listDriveFolderContents(resultsAdaptor);
+    }
+
+    /**
+     * List contents of a folder in your google drive and append them to resultsAdaptor.
+     */
+    public void listDriveFolderContents(final DataBufferAdapter<Metadata> resultsAdaptor) {
+        listDriveFolderContents(resultsAdaptor, new ArrayList<Filter>());
     }
 
     /**
      * List contents of a folder in your google drive and append them to resultsAdaptor.
      */
     public void listDriveFolderContents(
-            DriveId folderId, final DataBufferAdapter<Metadata> resultsAdaptor) {
-        DriveFolder folder = Drive.DriveApi.getFolder(mGoogleApiClient, folderId);
-        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                .setTitle("MyNewFolder").build();
-        folder.listChildren(mGoogleApiClient)
+            final DataBufferAdapter<Metadata> resultsAdaptor,
+            Iterable<Filter> filters) {
+        Query query = new Query.Builder()
+                .addFilter(Filters.eq(SearchableField.TRASHED, false))
+                .addFilter(Filters.and(filters))
+                .build();
+        Drive.DriveApi.query(mGoogleApiClient, query)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
                     @Override
                     public void onResult(DriveApi.MetadataBufferResult result) {
@@ -266,5 +281,15 @@ public class WePhotoMainActivity extends FragmentActivity implements
                         Log.i(TAG, "Successfully listed files.");
                     }
                 });
+    }
+
+    /**
+     * Opens a file on drive.
+     */
+    public void getDriveFileContents(
+            DriveId fileId, ResultCallback<DriveApi.ContentsResult> resultsCallback) {
+        DriveFile file = Drive.DriveApi.getFile(mGoogleApiClient, fileId);
+        file.openContents(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
+                .setResultCallback(resultsCallback);
     }
 }
