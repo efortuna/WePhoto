@@ -106,8 +106,12 @@ public class TakePhotoFragment extends Fragment {
         }
         Log.i(TAG, "Snapshot dimensions: " + bitmap.getWidth() + " x " + bitmap.getHeight());
         ImageView imageView = (ImageView) getActivity().findViewById(R.id.imageView);
+        if (imageView == null) {
+            return;
+        }
         imageView.setImageBitmap(bitmap);
     }
+
     protected File getSnapfile() {
         File snapDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),

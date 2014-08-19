@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +30,7 @@ public class WePhotoMainActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    private static final String TAG = WePhotoMainActivity.class.getSimpleName();
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
@@ -56,8 +58,8 @@ public class WePhotoMainActivity extends FragmentActivity implements
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Adding Tabs
-        String[] tabs = { getString(R.string.takePhotos), getString(R.string.gallery),
-                getString(R.string.previousEvents) };
+        String[] tabs = {getString(R.string.takePhotos), getString(R.string.gallery),
+                getString(R.string.previousEvents)};
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
                     .setTabListener(this));
@@ -85,14 +87,14 @@ public class WePhotoMainActivity extends FragmentActivity implements
         });
 
         /**
-        * Set up google drive connection.
-        */
+         * Set up google drive connection.
+         */
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-            .addApi(Drive.API)
-            .addScope(Drive.SCOPE_FILE)
-            .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
-            .build();
+                .addApi(Drive.API)
+                .addScope(Drive.SCOPE_FILE)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
 
     @Override
@@ -106,7 +108,7 @@ public class WePhotoMainActivity extends FragmentActivity implements
      */
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i("", "GoogleApiClient connected");
+        Log.i(TAG, "GoogleApiClient connected");
     }
 
     @Override
@@ -129,7 +131,7 @@ public class WePhotoMainActivity extends FragmentActivity implements
      */
     @Override
     public void onConnectionSuspended(int cause) {
-        Log.i("", "GoogleApiClient connection suspended");
+        Log.w(TAG, "GoogleApiClient connection suspended");
     }
 
     @Override
@@ -161,9 +163,9 @@ public class WePhotoMainActivity extends FragmentActivity implements
     /**
      * Create a new file and save it to Drive.
      */
-    private void saveImageToDrive(final Bitmap imageData, final String filePath) {
+    public void saveImageToDrive(final Bitmap imageData, final String filePath) {
         // Start by creating a new contents, and setting a callback.
-        Log.i("", "Creating new contents.");
+        Log.i(TAG, "Creating new contents.");
         Drive.DriveApi.newContents(mGoogleApiClient).setResultCallback(new ResultCallback<DriveApi.ContentsResult>() {
 
             @Override
@@ -172,11 +174,11 @@ public class WePhotoMainActivity extends FragmentActivity implements
                 // and must
                 // fail.
                 if (!result.getStatus().isSuccess()) {
-                    Log.i("", "Failed to create new contents.");
+                    Log.e(TAG, "Failed to create new contents.");
                     return;
                 }
                 // Otherwise, we can write our data to the new contents.
-                Log.i("", "New contents created.");
+                Log.i(TAG, "New contents created.");
                 // Get an output stream for the contents.
                 OutputStream outputStream = result.getContents().getOutputStream();
                 // Write the bitmap data from it.
@@ -185,7 +187,7 @@ public class WePhotoMainActivity extends FragmentActivity implements
                 try {
                     outputStream.write(bitmapStream.toByteArray());
                 } catch (IOException e1) {
-                    Log.i("", "Unable to write file contents.");
+                    Log.e(TAG, "Unable to write file contents.");
                 }
                 // Create the initial metadata - MIME type and title.
                 // Note that the user will be able to change the title later.
@@ -201,8 +203,27 @@ public class WePhotoMainActivity extends FragmentActivity implements
                     startIntentSenderForResult(
                             intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
                 } catch (IntentSender.SendIntentException e) {
-                    Log.i("", "Failed to launch file chooser.");
+                    Log.i(TAG, "Failed to launch file chooser.");
                 }
+            }
+        });
+    }
+
+    /**
+     * Create a new folder in the root folder on drive.
+     */
+    public void createDriveFolder(String folderName) {
+        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                .setTitle(folderName).build();
+        Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(mGoogleApiClient, changeSet)
+                .setResultCallback(new ResultCallback<DriveFolder.DriveFolderResult>() {
+            @Override
+            public void onResult(DriveFolder.DriveFolderResult result) {
+                if (!result.getStatus().isSuccess()) {
+                    Log.e(TAG, "Error while trying to create the folder");
+                    return;
+                }
+                Log.i(TAG, "Created a folder: " + result.getDriveFolder().getDriveId());
             }
         });
     }
