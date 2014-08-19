@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -12,7 +13,15 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.MetadataChangeSet;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 public class WePhotoMainActivity extends FragmentActivity implements
@@ -23,6 +32,9 @@ public class WePhotoMainActivity extends FragmentActivity implements
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
+    private static final int REQUEST_CODE_CAPTURE_IMAGE = 1;
+    private static final int REQUEST_CODE_CREATOR = 2;
+    private static final int REQUEST_CODE_RESOLUTION = 3;
 
     /**
      * Google API client.
@@ -103,7 +115,7 @@ public class WePhotoMainActivity extends FragmentActivity implements
         if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(
-                        this, ConnectionResult.RESOLUTION_REQUIRED);
+                        this, REQUEST_CODE_RESOLUTION);
             } catch (IntentSender.SendIntentException e) {
                 // Unable to resolve, message user appropriately
             }
@@ -123,7 +135,7 @@ public class WePhotoMainActivity extends FragmentActivity implements
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
-            case ConnectionResult.RESOLUTION_REQUIRED:
+            case REQUEST_CODE_RESOLUTION:
                 if (resultCode == RESULT_OK) {
                     mGoogleApiClient.connect();
                 }
@@ -146,4 +158,52 @@ public class WePhotoMainActivity extends FragmentActivity implements
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
     }
 
+    /**
+     * Create a new file and save it to Drive.
+     */
+    private void saveImageToDrive(final Bitmap imageData, final String filePath) {
+        // Start by creating a new contents, and setting a callback.
+        Log.i("", "Creating new contents.");
+        Drive.DriveApi.newContents(mGoogleApiClient).setResultCallback(new ResultCallback<DriveApi.ContentsResult>() {
+
+            @Override
+            public void onResult(DriveApi.ContentsResult result) {
+                // If the operation was not successful, we cannot do anything
+                // and must
+                // fail.
+                if (!result.getStatus().isSuccess()) {
+                    Log.i("", "Failed to create new contents.");
+                    return;
+                }
+                // Otherwise, we can write our data to the new contents.
+                Log.i("", "New contents created.");
+                // Get an output stream for the contents.
+                OutputStream outputStream = result.getContents().getOutputStream();
+                // Write the bitmap data from it.
+                ByteArrayOutputStream bitmapStream = new ByteArrayOutputStream();
+                imageData.compress(Bitmap.CompressFormat.PNG, 100, bitmapStream);
+                try {
+                    outputStream.write(bitmapStream.toByteArray());
+                } catch (IOException e1) {
+                    Log.i("", "Unable to write file contents.");
+                }
+                // Create the initial metadata - MIME type and title.
+                // Note that the user will be able to change the title later.
+                MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                        .setMimeType("image/png").setTitle(filePath).build();
+                // Create an intent for the file chooser, and start it.
+                IntentSender intentSender = Drive.DriveApi
+                        .newCreateFileActivityBuilder()
+                        .setInitialMetadata(metadataChangeSet)
+                        .setInitialContents(result.getContents())
+                        .build(mGoogleApiClient);
+                try {
+                    startIntentSenderForResult(
+                            intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
+                } catch (IntentSender.SendIntentException e) {
+                    Log.i("", "Failed to launch file chooser.");
+                }
+            }
+        });
+    }
 }
