@@ -16,14 +16,16 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
-import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.widget.DataBufferAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
+import java.util.concurrent.Future;
 
 public class WePhotoMainActivity extends FragmentActivity implements
         ActionBar.TabListener,
@@ -210,13 +212,10 @@ public class WePhotoMainActivity extends FragmentActivity implements
     }
 
     /**
-     * Create a new folder in the root folder on drive.
+     * Create a new folder in the root folder on drive with a default callback.
      */
     public void createDriveFolder(String folderName) {
-        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                .setTitle(folderName).build();
-        Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(mGoogleApiClient, changeSet)
-                .setResultCallback(new ResultCallback<DriveFolder.DriveFolderResult>() {
+        createDriveFolder(folderName, new ResultCallback<DriveFolder.DriveFolderResult>() {
             @Override
             public void onResult(DriveFolder.DriveFolderResult result) {
                 if (!result.getStatus().isSuccess()) {
@@ -226,5 +225,47 @@ public class WePhotoMainActivity extends FragmentActivity implements
                 Log.i(TAG, "Created a folder: " + result.getDriveFolder().getDriveId());
             }
         });
+    }
+
+    /**
+     * Creates a new folder in the root folder with a specified callback.
+     */
+    public void createDriveFolder(
+            String folderName, ResultCallback<DriveFolder.DriveFolderResult> resultCallback) {
+        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                .setTitle(folderName).build();
+        Future<DriveFolder.DriveFolderResult> result;
+        Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(mGoogleApiClient, changeSet)
+                .setResultCallback(resultCallback);
+    }
+
+    /**
+     * List contents of the root drive folder and append them to resultsAdaptor.
+     */
+    public void listRootFolderContents(final DataBufferAdapter<Metadata> resultsAdaptor) {
+        listDriveFolderContents(
+                Drive.DriveApi.getRootFolder(mGoogleApiClient).getDriveId(), resultsAdaptor);
+    }
+
+    /**
+     * List contents of a folder in your google drive and append them to resultsAdaptor.
+     */
+    public void listDriveFolderContents(
+            DriveId folderId, final DataBufferAdapter<Metadata> resultsAdaptor) {
+        DriveFolder folder = Drive.DriveApi.getFolder(mGoogleApiClient, folderId);
+        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                .setTitle("MyNewFolder").build();
+        folder.listChildren(mGoogleApiClient)
+                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
+                    @Override
+                    public void onResult(DriveApi.MetadataBufferResult result) {
+                        if (!result.getStatus().isSuccess()) {
+                            Log.e(TAG, "Problem while retrieving files");
+                            return;
+                        }
+                        resultsAdaptor.append(result.getMetadataBuffer());
+                        Log.i(TAG, "Successfully listed files.");
+                    }
+                });
     }
 }
