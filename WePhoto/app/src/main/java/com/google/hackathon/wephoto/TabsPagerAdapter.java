@@ -19,7 +19,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 return new TakePhotoFragment();
             case 1:
                 // Games fragment activity
-                return new GalleryFragment();
+                return new PhotoGalleryFragment();
             case 2:
                 // Movies fragment activity
                 return new PreviousEventsFragment();
