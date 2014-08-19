@@ -2,10 +2,10 @@
 <resources>
 
     <string name="app_name">WePhoto</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="photoMode">take photoz!</string>
-    <string name="gallery">gallery</string>
-    <string name="prevEvents">Old events</string>
+    <string name="title_activity_we_photo">WePhoto</string>
+    <string name="action_settings">Settings</string>
+    <string name="previousEvents">Previous Events</string>
+    <string name="gallery">Gallery</string>
+    <string name="takePhotos">Take Photoz</string>
 
 </resources>
