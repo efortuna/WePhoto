@@ -138,6 +138,7 @@ public class WePhotoMainActivity extends FragmentActivity implements
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_CODE_RESOLUTION:
                 if (resultCode == RESULT_OK) {
@@ -168,13 +169,11 @@ public class WePhotoMainActivity extends FragmentActivity implements
     public void saveImageToDrive(final Bitmap imageData, final String filePath) {
         // Start by creating a new contents, and setting a callback.
         Log.i(TAG, "Creating new contents.");
-        Drive.DriveApi.newContents(mGoogleApiClient).setResultCallback(new ResultCallback<DriveApi.ContentsResult>() {
-
+        Drive.DriveApi.newContents(mGoogleApiClient).setResultCallback(
+                new ResultCallback<DriveApi.ContentsResult>() {
             @Override
             public void onResult(DriveApi.ContentsResult result) {
-                // If the operation was not successful, we cannot do anything
-                // and must
-                // fail.
+                // If the operation was not successful, we cannot do anything and must fail.
                 if (!result.getStatus().isSuccess()) {
                     Log.e(TAG, "Failed to create new contents.");
                     return;
