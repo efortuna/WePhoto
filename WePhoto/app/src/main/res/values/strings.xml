@@ -7,5 +7,7 @@
     <string name="previousEvents">Previous Events</string>
     <string name="gallery">Gallery</string>
     <string name="takePhotos">Take Photoz</string>
+    <string name="snapPictureLabel">Snap</string>
+    <string name="pictureFolder">Hack-a-thon</string>
 
 </resources>

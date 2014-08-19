@@ -16,7 +16,7 @@ public class WePhotoMainActivity extends FragmentActivity implements ActionBar.T
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_mode);
+        setContentView(R.layout.activity_main_we_photo);
 
         // Initialization
         viewPager = (ViewPager) findViewById(R.id.pager);

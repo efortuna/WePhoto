@@ -5,12 +5,39 @@
     android:orientation="vertical"
     android:background="#fa6a6a" >
 
-    <TextView android:layout_width="fill_parent"
+    <!--<TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Design Take Photo Screen"
         android:textSize="20dp"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"/>-->
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_above="@+id/buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="centerInside"
+        />
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/snapButton"
+            android:text="@string/snapPictureLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
 
 
 </RelativeLayout>
