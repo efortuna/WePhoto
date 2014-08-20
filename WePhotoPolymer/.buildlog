@@ -874,3 +874,8 @@ build.dart --machine --changed=web/wephoto.html
 
 build.dart finished [1785 ms]
 
+---
+build.dart --machine --changed=pubspec.lock
+
+build.dart finished [1815 ms]
+
