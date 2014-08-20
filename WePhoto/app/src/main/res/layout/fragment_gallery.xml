@@ -8,6 +8,12 @@ tools:context=".WePhotoMainActivity" >
 <ListView
     android:id="@+id/fragment_gallery_list"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:paddingTop="50dp">
 </ListView>
+<Button
+    android:id="@+id/fragment_gallery_refresh"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="refresh" />
 </RelativeLayout>

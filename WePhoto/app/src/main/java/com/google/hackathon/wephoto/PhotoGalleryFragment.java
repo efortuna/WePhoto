@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -60,6 +61,19 @@ public class PhotoGalleryFragment extends Fragment {
         });
 
         retrieveNextPage();
+
+        Button myRefreshButton = (Button) rootView.findViewById(R.id.fragment_gallery_refresh);
+        myRefreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "clicked refresh!");
+                resultsAdapter.notifyDataSetInvalidated();
+                resultsAdapter.clear();
+                mNextPageToken = null;
+                mHasMore = true;
+                retrieveNextPage();
+            }
+        });
 
         return rootView;
     }

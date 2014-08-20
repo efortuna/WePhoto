@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.DriveApi;
@@ -40,14 +41,8 @@ public class DrivePhotoList extends DataBufferAdapter<Metadata> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = View.inflate(getContext(),
-                    R.layout.list_single, null);
-        }
+        convertView = View.inflate(getContext(), R.layout.list_single, null);
         final Metadata metadata = getItem(position);
-//        TextView titleTextView =
-//                (TextView) convertView.findViewById(R.id.txt);
-//        titleTextView.setText(metadata.getTitle());
 
         final ImageView imageView = (ImageView) convertView.findViewById(R.id.img);
         if (imageView == null) {
@@ -55,60 +50,63 @@ public class DrivePhotoList extends DataBufferAdapter<Metadata> {
             return convertView;
         }
 
+        Bitmap cachedBitmap = bitmapCache.get(metadata.getDriveId().encodeToString());
+        if (cachedBitmap != null) {
+            imageView.setImageBitmap(cachedBitmap);
+            return convertView;
+        }
         ((WePhotoMainActivity) context).getDriveFileContents(metadata.getDriveId())
                 .setResultCallback(new ResultCallback<DriveApi.ContentsResult>() {
-                    @Override
-                    public void onResult(DriveApi.ContentsResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.e(TAG, "Failed to read drive file");
-                            return;
-                        }
-                        // Contents object contains pointers to the actual byte stream
-                        Contents contents = result.getContents();
-                        InputStream stream = contents.getInputStream();
+            @Override
+            public void onResult(DriveApi.ContentsResult result) {
+                if (!result.getStatus().isSuccess()) {
+                    Log.e(TAG, "Failed to read drive file");
+                    return;
+                }
+                // Contents object contains pointers to the actual byte stream
+                Contents contents = result.getContents();
+                InputStream stream = contents.getInputStream();
 
-//                        Bitmap bitmap = null;
-//                        try {
-//                            bitmap = BitmapFactory.decodeStream(stream);
-//                        } catch (OutOfMemoryError e) {
-//                            Log.i(TAG, "Ran out of memory decoding file: " + e.getMessage());
-//                        }
-
-                        // Get the dimensions of the bitmap.
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        // Scale factor will be rounded down to nearest power of two.
-                        options.inSampleSize = 2;
-                        options.inPurgeable = true;
-                        Bitmap bitmap = bitmapCache.get(metadata.getDriveId().encodeToString());
-                        if (bitmap != null) {
-                            Log.i(TAG, "Found cached bitmap!");
+                // Get the dimensions of the bitmap.
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                // Scale factor will be rounded down to nearest power of two.
+                options.inSampleSize = 2;
+                options.inPurgeable = true;
+                Bitmap bitmap = bitmapCache.get(metadata.getDriveId().encodeToString());
+                if (bitmap != null) {
+                    Log.i(TAG, "Found cached bitmap: " + metadata.getDriveId().encodeToString());
+                }
+                while (bitmap == null) {
+                    try {
+                        Log.i(TAG, "Down-sampling image by " + options.inSampleSize + "x");
+                        bitmap = BitmapFactory.decodeStream(stream);
+                        break;
+                    } catch (OutOfMemoryError e) {
+                        options.inSampleSize *= 2;
+                        try {
+                            stream.reset();
+                        } catch (IOException streamError) {
+                            Log.e(TAG,
+                                    "error resetting stream:" + streamError.getMessage());
                         }
-                        while (bitmap == null) {
-                            try {
-                                Log.i(TAG, "Down-sampling image by " + options.inSampleSize + "x");
-                                bitmap = BitmapFactory.decodeStream(stream);
-                                break;
-                            } catch (OutOfMemoryError e) {
-                                options.inSampleSize *= 2;
-                                try {
-                                    stream.reset();
-                                } catch (IOException streamError) {
-                                    Log.e(TAG,
-                                          "error resetting stream:" + streamError.getMessage());
-                                }
-                            } catch (Exception e) {
-                                Log.e(TAG, "Loading image file error: " + e.getMessage());
-                                break;
-                            }
-                        }
-                        if (bitmap == null) {
-                            Log.e(TAG, "Failed to decode bitmap stream");
-                            return;
-                        }
-                        bitmapCache.put(metadata.getDriveId().encodeToString(), bitmap);
-                        imageView.setImageBitmap(bitmap);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Loading image file error: " + e.getMessage());
+                        break;
                     }
-                });
+                }
+                try {
+                    stream.close();
+                } catch (IOException streamError) {
+                    Log.e(TAG, "error closing stream:" + streamError.getMessage());
+                }
+                if (bitmap == null) {
+                    Log.e(TAG, "Failed to decode bitmap stream");
+                    return;
+                }
+                bitmapCache.put(metadata.getDriveId().encodeToString(), bitmap);
+                imageView.setImageBitmap(bitmap);
+            }
+        });
 
         return convertView;
     }
