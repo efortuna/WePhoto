@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.widget.DataBufferAdapter;
 
@@ -22,11 +23,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DrivePhotoList extends DataBufferAdapter<Metadata> {
 
     private static final String TAG = DrivePhotoList.class.getSimpleName();
     private Activity context;
+
+    private Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
 
     public DrivePhotoList(Activity context) {
         super(context, R.layout.list_single);
@@ -39,7 +44,7 @@ public class DrivePhotoList extends DataBufferAdapter<Metadata> {
             convertView = View.inflate(getContext(),
                     R.layout.list_single, null);
         }
-        Metadata metadata = getItem(position);
+        final Metadata metadata = getItem(position);
 //        TextView titleTextView =
 //                (TextView) convertView.findViewById(R.id.txt);
 //        titleTextView.setText(metadata.getTitle());
@@ -74,8 +79,11 @@ public class DrivePhotoList extends DataBufferAdapter<Metadata> {
                         // Scale factor will be rounded down to nearest power of two.
                         options.inSampleSize = 2;
                         options.inPurgeable = true;
-                        Bitmap bitmap = null;
-                        while (true) {
+                        Bitmap bitmap = bitmapCache.get(metadata.getDriveId().encodeToString());
+                        if (bitmap != null) {
+                            Log.i(TAG, "Found cached bitmap!");
+                        }
+                        while (bitmap == null) {
                             try {
                                 Log.i(TAG, "Down-sampling image by " + options.inSampleSize + "x");
                                 bitmap = BitmapFactory.decodeStream(stream);
@@ -97,6 +105,7 @@ public class DrivePhotoList extends DataBufferAdapter<Metadata> {
                             Log.e(TAG, "Failed to decode bitmap stream");
                             return;
                         }
+                        bitmapCache.put(metadata.getDriveId().encodeToString(), bitmap);
                         imageView.setImageBitmap(bitmap);
                     }
                 });

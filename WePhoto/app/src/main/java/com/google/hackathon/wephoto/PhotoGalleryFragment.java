@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,6 +21,9 @@ import java.util.List;
 public class PhotoGalleryFragment extends Fragment {
 
     private static final String TAG = PhotoGalleryFragment.class.getSimpleName();
+    private String mNextPageToken;
+    private Boolean mHasMore = true;
+    private DrivePhotoList resultsAdapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,14 +35,47 @@ public class PhotoGalleryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
 
         ListView myListView = (ListView) rootView.findViewById(R.id.fragment_gallery_list);
-        final DrivePhotoList resultsAdapter = new DrivePhotoList(this.getActivity());
+        resultsAdapter = new DrivePhotoList(this.getActivity());
         myListView.setAdapter(resultsAdapter);
+
+        myListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            /**
+             * Handles onScroll to retrieve next pages of results
+             * if there are more results items to display.
+             */
+            @Override
+            public void onScroll(AbsListView view, int first, int visible, int total) {
+                if (mNextPageToken != null && first + visible + 5 < total) {
+                    retrieveNextPage();
+                }
+            }
+        });
+
+        retrieveNextPage();
+
+        return rootView;
+    }
+
+    /**
+     * Retrieves results for the next page. For the first run,
+     * it retrieves results for the first page.
+     */
+    private void retrieveNextPage() {
+        // if there are no more results to retrieve,
+        // return silently.
+        if (!mHasMore) {
+            return;
+        }
         // TODO(jakemac): List files only in the current folder!
-        ((WePhotoMainActivity) this.getActivity()).listDriveFolderContents()
+        ((WePhotoMainActivity) this.getActivity()).listDriveFolderContents(mNextPageToken)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
                     @Override
                     public void onResult(DriveApi.MetadataBufferResult metadataBufferResult) {
@@ -47,9 +84,10 @@ public class PhotoGalleryFragment extends Fragment {
                             return;
                         }
                         resultsAdapter.append(metadataBufferResult.getMetadataBuffer());
+                        String mNextPageToken =
+                                metadataBufferResult.getMetadataBuffer().getNextPageToken();
+                        mHasMore = mNextPageToken != null;
                     }
                 });
-
-        return rootView;
     }
 }

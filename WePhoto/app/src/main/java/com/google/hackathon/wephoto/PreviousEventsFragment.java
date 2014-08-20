@@ -36,7 +36,7 @@ public class PreviousEventsFragment extends Fragment {
         List<Filter> filters = new ArrayList<Filter>();
 //        filters.add(Filters.in(
 //                SearchableField.PARENTS, ((WePhotoMainActivity) this.getActivity()).currentEvent));
-        ((WePhotoMainActivity) this.getActivity()).listDriveFolderContents()
+        ((WePhotoMainActivity) this.getActivity()).listDriveFolderContents(null)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
                     @Override
                     public void onResult(DriveApi.MetadataBufferResult metadataBufferResult) {

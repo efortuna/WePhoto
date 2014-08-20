@@ -306,19 +306,22 @@ public class WePhotoMainActivity extends FragmentActivity implements
     /**
      * List contents of a folder in your google drive and append them to resultsAdaptor.
      */
-    public PendingResult<DriveApi.MetadataBufferResult> listDriveFolderContents() {
-        return listDriveFolderContents(new ArrayList<Filter>());
+    public PendingResult<DriveApi.MetadataBufferResult> listDriveFolderContents(String pageToken) {
+        return listDriveFolderContents(new ArrayList<Filter>(), pageToken);
     }
 
     /**
      * List contents of a folder in your google drive and append them to resultsAdaptor.
      */
     public PendingResult<DriveApi.MetadataBufferResult> listDriveFolderContents(
-            Iterable<Filter> filters) {
-        Query query = new Query.Builder()
+            Iterable<Filter> filters, String pageToken) {
+        Query.Builder queryBuilder = new Query.Builder()
                 .addFilter(Filters.eq(SearchableField.TRASHED, false))
-                .addFilter(Filters.and(filters))
-                .build();
+                .addFilter(Filters.and(filters));
+        if (pageToken != null) {
+            queryBuilder.setPageToken(pageToken);
+        }
+        Query query = queryBuilder.build();
         return Drive.DriveApi.query(mGoogleApiClient, query);
 //        return Drive.DriveApi.getRootFolder(mGoogleApiClient).listChildren(mGoogleApiClient)
     }
