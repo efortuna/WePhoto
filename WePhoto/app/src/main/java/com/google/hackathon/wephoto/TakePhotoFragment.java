@@ -25,6 +25,7 @@ public class TakePhotoFragment extends Fragment {
     private static final int ACTIVITY_REQUEST_CAPTURE = 1;
     private static final String PREFS_SNAP_NUMBER = "snapNumber";
     private int snapNumber;
+    private Bitmap currentBitmap;
 
     @Override
     public void onStart() {
@@ -77,8 +78,8 @@ public class TakePhotoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ACTIVITY_REQUEST_CAPTURE && resultCode == Activity.RESULT_OK) {
-            uploadPhoto();
             updateView();
+            uploadPhoto();
             return;
         }
         Log.i(TAG, "Unknown Activity Request code: " + requestCode);
@@ -103,6 +104,7 @@ public class TakePhotoFragment extends Fragment {
                 Log.i(TAG, "Loading image file error: " + e.getMessage());
             }
         }
+        currentBitmap = bitmap;
         if (bitmap == null) {
             Log.w(TAG, "Failed to read image from storage");
             return;
@@ -116,14 +118,12 @@ public class TakePhotoFragment extends Fragment {
     }
 
     protected void uploadPhoto() {
-        String snapPath = getSnapfile().getAbsolutePath();
-        Bitmap bitmap = BitmapFactory.decodeFile(snapPath);
-        if (bitmap == null) {
-            Log.w(TAG, "Failed to read image from storage");
+        if (currentBitmap == null) {
+            Log.w(TAG, "skipping upload of null bitmap");
             return;
         }
         ((WePhotoMainActivity) this.getActivity()).saveImageToDrive(
-                bitmap, getSnapfile().getName());
+                currentBitmap, getSnapfile().getName());
         Log.i(TAG, "Saving file to drive: " + getSnapfile().getName());
     }
 

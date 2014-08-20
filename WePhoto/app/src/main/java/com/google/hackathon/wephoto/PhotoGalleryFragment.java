@@ -2,6 +2,7 @@ package com.google.hackathon.wephoto;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.query.Filter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PhotoGalleryFragment extends Fragment {
-    ListView list;
-    String[] web;
-    Integer[] imageId;
-    View rootView;
+
+    private static final String TAG = PhotoGalleryFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,26 +32,23 @@ public class PhotoGalleryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        web = new String[100];
-        imageId = new Integer[100];
-        for (int i=0; i < web.length; i++) {
-            web[i] = (i%2 == 0) ? "grand canyon" : "space needle";
-            imageId[i] = (i%2 == 0) ? R.drawable.image1 : R.drawable.image2;
-        }
-        PhotoList adapter = new
-                PhotoList(getActivity(), web, imageId);
-        list=(ListView)(rootView.findViewById(R.id.fragment_gallery_list));
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Toast.makeText(getActivity(), "You Clicked at " + web[+position], Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        ListView myListView = (ListView) rootView.findViewById(R.id.fragment_gallery_list);
+        final DrivePhotoList resultsAdapter = new DrivePhotoList(this.getActivity());
+        myListView.setAdapter(resultsAdapter);
+        // TODO(jakemac): List files only in the current folder!
+        ((WePhotoMainActivity) this.getActivity()).listDriveFolderContents()
+                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
+                    @Override
+                    public void onResult(DriveApi.MetadataBufferResult metadataBufferResult) {
+                        if (!metadataBufferResult.getStatus().isSuccess()) {
+                            Log.e(TAG, "Failed to get files.");
+                            return;
+                        }
+                        resultsAdapter.append(metadataBufferResult.getMetadataBuffer());
+                    }
+                });
 
         return rootView;
     }
