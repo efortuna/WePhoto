@@ -4,10 +4,10 @@ body {
   font-size: 14px;
   font-weight: normal;
   line-height: 1.2em;
-  margin: 15px;
+  margin: 0px;
+  padding: 0px;
 }
 
 h1, p {
   color: #333;
 }
-
