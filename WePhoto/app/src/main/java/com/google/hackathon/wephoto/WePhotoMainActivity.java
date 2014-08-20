@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.drive.query.Filter;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -52,7 +54,7 @@ public class WePhotoMainActivity extends FragmentActivity implements
     private static final int REQUEST_CODE_CREATOR = 2;
     private static final int REQUEST_CODE_RESOLUTION = 3;
 
-    private String currentEvent;
+    public DriveId currentEvent;
     private Date eventTime;
 
     /**
@@ -186,71 +188,52 @@ public class WePhotoMainActivity extends FragmentActivity implements
         Log.i(TAG, "Creating new contents.");
         Drive.DriveApi.newContents(mGoogleApiClient).setResultCallback(
                 new ResultCallback<DriveApi.ContentsResult>() {
-            @Override
-            public void onResult(DriveApi.ContentsResult result) {
-                // If the operation was not successful, we cannot do anything and must fail.
-                if (!result.getStatus().isSuccess()) {
-                    Log.e(TAG, "Failed to create new contents.");
-                    return;
-                }
-                // Otherwise, we can write our data to the new contents.
-                Log.i(TAG, "New contents created.");
-                // Get an output stream for the contents.
-                OutputStream outputStream = result.getContents().getOutputStream();
-                // Write the bitmap data from it.
-                ByteArrayOutputStream bitmapStream = new ByteArrayOutputStream();
-                imageData.compress(Bitmap.CompressFormat.PNG, 100, bitmapStream);
-                try {
-                    outputStream.write(bitmapStream.toByteArray());
-                } catch (IOException e1) {
-                    Log.e(TAG, "Unable to write file contents.");
-                }
-                // Create the initial metadata - MIME type and title.
-                // Note that the user will be able to change the title later.
-                MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                        .setMimeType("image/png").setTitle(filePath).build();
-                // Create an intent for the file chooser, and start it.
-                IntentSender intentSender = Drive.DriveApi
-                        .newCreateFileActivityBuilder()
-                        .setInitialMetadata(metadataChangeSet)
-                        .setInitialContents(result.getContents())
-                        .build(mGoogleApiClient);
-                try {
-                    startIntentSenderForResult(
-                            intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
-                } catch (IntentSender.SendIntentException e) {
-                    Log.i(TAG, "Failed to launch file chooser.");
-                }
-            }
-        });
-    }
-
-    /**
-     * Create a new folder in the root folder on drive with a default callback.
-     */
-    public void createDriveFolder(String folderName) {
-        createDriveFolder(folderName, new ResultCallback<DriveFolder.DriveFolderResult>() {
-            @Override
-            public void onResult(DriveFolder.DriveFolderResult result) {
-                if (!result.getStatus().isSuccess()) {
-                    Log.e(TAG, "Error while trying to create the folder");
-                    return;
-                }
-                Log.i(TAG, "Created a folder: " + result.getDriveFolder().getDriveId());
-            }
-        });
+                    @Override
+                    public void onResult(DriveApi.ContentsResult result) {
+                        // If the operation was not successful, we cannot do anything and must fail.
+                        if (!result.getStatus().isSuccess()) {
+                            Log.e(TAG, "Failed to create new contents.");
+                            return;
+                        }
+                        // Otherwise, we can write our data to the new contents.
+                        Log.i(TAG, "New contents created.");
+                        // Get an output stream for the contents.
+                        OutputStream outputStream = result.getContents().getOutputStream();
+                        // Write the bitmap data from it.
+                        ByteArrayOutputStream bitmapStream = new ByteArrayOutputStream();
+                        imageData.compress(Bitmap.CompressFormat.PNG, 100, bitmapStream);
+                        try {
+                            outputStream.write(bitmapStream.toByteArray());
+                        } catch (IOException e1) {
+                            Log.e(TAG, "Unable to write file contents.");
+                        }
+                        // Create the initial metadata - MIME type and title.
+                        // Note that the user will be able to change the title later.
+                        MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                                .setMimeType("image/png").setTitle(filePath).build();
+                        // Create an intent for the file chooser, and start it.
+                        IntentSender intentSender = Drive.DriveApi
+                                .newCreateFileActivityBuilder()
+                                .setInitialMetadata(metadataChangeSet)
+                                .setInitialContents(result.getContents())
+                                .build(mGoogleApiClient);
+                        try {
+                            startIntentSenderForResult(
+                                    intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.i(TAG, "Failed to launch file chooser.");
+                        }
+                    }
+                });
     }
 
     /**
      * Creates a new folder in the root folder with a specified callback.
      */
-    public void createDriveFolder(
-            String folderName, ResultCallback<DriveFolder.DriveFolderResult> resultCallback) {
-        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                .setTitle(folderName).build();
-        Future<DriveFolder.DriveFolderResult> result;
-        Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(mGoogleApiClient, changeSet)
-                .setResultCallback(resultCallback);
+    public PendingResult<DriveFolder.DriveFolderResult> createDriveFolder(String folderName) {
+        MetadataChangeSet changeSet = new MetadataChangeSet.Builder().setTitle(folderName).build();
+        return Drive.DriveApi.getRootFolder(mGoogleApiClient)
+                .createFolder(mGoogleApiClient, changeSet);
     }
 
     private boolean hasCurrentEventBeenSetInLastTwoHours() {
@@ -290,72 +273,68 @@ public class WePhotoMainActivity extends FragmentActivity implements
                         if (metadataResult.getStatus().getStatusCode() != CommonStatusCodes.TIMEOUT) {
                             Date dateModified = metadataResult.getMetadata().getModifiedDate();
                             if (modifiedLessThanThirtyMinutesAgo(dateModified)) {
-                                currentEvent = metadataResult.getMetadata().getTitle();
+                                currentEvent = metadataResult.getMetadata().getDriveId();
                                 eventTime = new Date();
                                 // TODO: within a certain range of geolocation
 
                             }
                         } else {
                             // No recent events. Create a new event!
-                            currentEvent = "geographic location here";
-                            eventTime = new Date();
-                            MetadataChangeSet.Builder builder = new MetadataChangeSet.Builder();
-                            builder.setTitle(currentEvent);
-                            d.createFolder(mGoogleApiClient, builder.build());
+                            String currentEventName = "geographic location here";
+//                            eventTime = new Date();
+                            createDriveFolder(currentEventName).setResultCallback(
+                                    new ResultCallback<DriveFolder.DriveFolderResult>() {
+                                @Override
+                                public void onResult(DriveFolder.DriveFolderResult driveFolderResult) {
+                                    if (!driveFolderResult.getStatus().isSuccess()) {
+                                        Log.e(TAG, "Failed to create event!");
+                                        return;
+                                    }
+                                    currentEvent = driveFolderResult.getDriveFolder().getDriveId();
+                                }
+                            });
                         }
                     }
                 }, 1, TimeUnit.MINUTES);
             }
 
-            listRootFolderContents(new EventsAdapter(this));
+            // TODO: update the PreviousEventsFragment somehow with this.
+//            listDriveFolderContents(new EventsAdapter(this));
         }
     }
 
     /**
-     * List contents of the root drive folder and append them to resultsAdaptor.
+     * List contents of a folder in your google drive and append them to resultsAdaptor.
      */
-    public void listRootFolderContents(final DataBufferAdapter<Metadata> resultsAdaptor) {
-        listDriveFolderContents(resultsAdaptor);
+    public PendingResult<DriveApi.MetadataBufferResult> listDriveFolderContents() {
+        return listDriveFolderContents(new ArrayList<Filter>());
     }
 
     /**
      * List contents of a folder in your google drive and append them to resultsAdaptor.
      */
-    public void listDriveFolderContents(final DataBufferAdapter<Metadata> resultsAdaptor) {
-        listDriveFolderContents(resultsAdaptor, new ArrayList<Filter>());
-    }
-
-    /**
-     * List contents of a folder in your google drive and append them to resultsAdaptor.
-     */
-    public void listDriveFolderContents(
-            final DataBufferAdapter<Metadata> resultsAdaptor,
+    public PendingResult<DriveApi.MetadataBufferResult> listDriveFolderContents(
             Iterable<Filter> filters) {
         Query query = new Query.Builder()
                 .addFilter(Filters.eq(SearchableField.TRASHED, false))
                 .addFilter(Filters.and(filters))
                 .build();
-        Drive.DriveApi.query(mGoogleApiClient, query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.e(TAG, "Problem while retrieving files");
-                            return;
-                        }
-                        resultsAdaptor.append(result.getMetadataBuffer());
-                        Log.i(TAG, "Successfully listed files.");
-                    }
-                });
+        return Drive.DriveApi.query(mGoogleApiClient, query);
+//        return Drive.DriveApi.getRootFolder(mGoogleApiClient).listChildren(mGoogleApiClient)
     }
 
     /**
      * Opens a file on drive.
      */
-    public void getDriveFileContents(
-            DriveId fileId, ResultCallback<DriveApi.ContentsResult> resultsCallback) {
+    public PendingResult<DriveApi.ContentsResult> getDriveFileContents(DriveId fileId) {
         DriveFile file = Drive.DriveApi.getFile(mGoogleApiClient, fileId);
-        file.openContents(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
-                .setResultCallback(resultsCallback);
+        return file.openContents(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null);
+    }
+
+    /**
+     * Gets the drive id for a folder by id string.
+     */
+    public PendingResult<DriveApi.DriveIdResult> getDriveId(String id) {
+        return Drive.DriveApi.fetchDriveId(mGoogleApiClient, id);
     }
 }
