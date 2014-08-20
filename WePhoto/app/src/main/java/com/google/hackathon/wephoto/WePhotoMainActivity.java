@@ -12,12 +12,14 @@ import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.DriveResource;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.widget.DataBufferAdapter;
@@ -25,7 +27,11 @@ import com.google.android.gms.drive.widget.DataBufferAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class WePhotoMainActivity extends FragmentActivity implements
         ActionBar.TabListener,
@@ -39,6 +45,9 @@ public class WePhotoMainActivity extends FragmentActivity implements
     private static final int REQUEST_CODE_CAPTURE_IMAGE = 1;
     private static final int REQUEST_CODE_CREATOR = 2;
     private static final int REQUEST_CODE_RESOLUTION = 3;
+
+    private String currentEvent;
+    private Date eventTime;
 
     /**
      * Google API client.
@@ -236,6 +245,64 @@ public class WePhotoMainActivity extends FragmentActivity implements
         Future<DriveFolder.DriveFolderResult> result;
         Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(mGoogleApiClient, changeSet)
                 .setResultCallback(resultCallback);
+    }
+
+    private boolean hasCurrentEventBeenSetInLastTwoHours() {
+        if (currentEvent == null) return false;
+
+        Date now = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(now);
+        c.add(Calendar.HOUR, -2);
+        Date twoHoursAgo = c.getTime();
+        return eventTime.compareTo(twoHoursAgo) < 0;
+    }
+
+    private boolean modifiedLessThanThirtyMinutesAgo(Date modified) {
+        Date now = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(modified);
+        c.add(Calendar.MINUTE, 30);
+        Date thirtyMinutesLater = c.getTime();
+        return now.compareTo(thirtyMinutesLater) > 0;
+    }
+
+    private ArrayList<DriveFolder> getSetOfDirectories() {
+        return new ArrayList<DriveFolder>(); // TODO: actually query docs. (jakemac?)
+    }
+
+    public void updateCurrentEvent() {
+        if (!hasCurrentEventBeenSetInLastTwoHours()) {
+            currentEvent = null;
+            //   display "looking for event" // in gallery fragment code..
+            //   get all events. Find the one that is closest(or create one). Then display all the pictures IN that event.
+            for (final DriveFolder d : getSetOfDirectories()) {
+                // TODO: fire up another thread for this.
+                d.getMetadata(mGoogleApiClient).setResultCallback(new ResultCallback<DriveResource.MetadataResult>() {
+                    @Override
+                    public void onResult(DriveResource.MetadataResult metadataResult) {
+                        if (metadataResult.getStatus().getStatusCode() != CommonStatusCodes.TIMEOUT) {
+                            Date dateModified = metadataResult.getMetadata().getModifiedDate();
+                            if (modifiedLessThanThirtyMinutesAgo(dateModified)) {
+                                currentEvent = metadataResult.getMetadata().getTitle();
+                                eventTime = new Date();
+                                // TODO: within a certain range of geolocation
+
+                            }
+                        } else {
+                            // No recent events. Create a new event!
+                            currentEvent = "geographic location here";
+                            eventTime = new Date();
+                            MetadataChangeSet.Builder builder = new MetadataChangeSet.Builder();
+                            builder.setTitle(currentEvent);
+                            d.createFolder(mGoogleApiClient, builder.build());
+                        }
+                    }
+                }, 1, TimeUnit.MINUTES);
+            }
+
+            listRootFolderContents(new EventsAdapter(this));
+        }
     }
 
     /**

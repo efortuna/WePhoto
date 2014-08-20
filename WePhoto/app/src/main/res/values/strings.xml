@@ -4,7 +4,7 @@
     <string name="app_name">WePhoto</string>
     <string name="title_activity_we_photo">WePhoto</string>
     <string name="action_settings">Settings</string>
-    <string name="previousEvents">Previous Events</string>
+    <string name="previousEvents">Old Events</string>
     <string name="gallery">Gallery</string>
     <string name="takePhotos">Take Photoz</string>
     <string name="snapPictureLabel">Snap</string>
