@@ -879,3 +879,586 @@ build.dart --machine --changed=pubspec.lock
 
 build.dart finished [1815 ms]
 
+---
+build.dart --machine --full
+[{"method":"info","params":{"message":"Took 1.2s (0.9s awaiting secondary inputs)."}}]
+build.dart finished [6431 ms]
+
+---
+build.dart --machine --changed=web/takePhoto.hml
+
+build.dart finished [4272 ms]
+
+---
+build.dart --machine --changed=web/take_photo.html --removed=web/takePhoto.hml
+Unhandled exception:
+Uncaught Error: Converting object to an encodable object failed.
+Stack Trace:
+#0      _JsonStringifier.stringifyValue (dart:convert/json.dart:489)
+#1      _JsonStringifier.stringifyJsonValue.<anonymous closure> (dart:convert/json.dart:543)
+#2      _HashMap&&_LinkedHashMapMixin.forEach (dart:collection-patch/collection_patch.dart:967)
+#3      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:538)
+#4      _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#5      _JsonStringifier.stringifyJsonValue.<anonymous closure> (dart:convert/json.dart:543)
+#6      _HashMap&&_LinkedHashMapMixin.forEach (dart:collection-patch/collection_patch.dart:967)
+#7      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:538)
+#8      _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#9      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:524)
+#10     _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#11     _JsonStringifier.printOn (dart:convert/json.dart:409)
+#12     _JsonStringifier.stringify (dart:convert/json.dart:403)
+#13     JsonEncoder.convert (dart:convert/json.dart:239)
+#14     JsonCodec.encode (dart:convert/json.dart:141)
+#15     _jsonFormatter (package:polymer/src/build/runner.dart:345:21)
+#16     _attachListeners.<anonymous closure> (package:polymer/src/build/runner.dart:216:27)
+#17     _rootRunUnary (dart:async/zone.dart:840)
+#18     _RootZone.runUnaryGuarded (dart:async/zone.dart:1022)
+#19     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#20     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#21     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#22     _BroadcastStreamController.add (dart:async/broadcast_stream_controller.dart:237)
+#23     _onLog (package:barback/src/graph/package_graph.dart:204:25)
+#24     _rootRunUnary (dart:async/zone.dart:840)
+#25     _CustomZone.runUnary (dart:async/zone.dart:748)
+#26     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#27     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#28     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#29     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#30     add (dart:async/broadcast_stream_controller.dart:237)
+#31     _rootRunUnary (dart:async/zone.dart:836)
+#32     _CustomZone.runUnary (dart:async/zone.dart:748)
+#33     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#34     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#35     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#36     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#37     add (dart:async/broadcast_stream_controller.dart:237)
+#38     _rootRunUnary (dart:async/zone.dart:836)
+#39     _CustomZone.runUnary (dart:async/zone.dart:748)
+#40     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#41     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#42     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#43     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#44     add (dart:async/broadcast_stream_controller.dart:237)
+#45     _rootRunUnary (dart:async/zone.dart:836)
+#46     _CustomZone.runUnary (dart:async/zone.dart:748)
+#47     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#48     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#49     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#50     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#51     add (dart:async/broadcast_stream_controller.dart:237)
+#52     _rootRunUnary (dart:async/zone.dart:836)
+#53     _CustomZone.runUnary (dart:async/zone.dart:748)
+#54     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#55     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#56     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#57     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#58     _BroadcastStreamController.add (dart:async/broadcast_stream_controller.dart:237)
+#59     BaseTransform.BaseTransform.<anonymous closure> (package:barback/src/transformer/base_transform.dart:52:27)
+#60     TransformLogger.warning (package:barback/src/transformer/transform_logger.dart:50:17)
+#61     _parseHtml (package:polymer/src/build/common.dart:40:23)
+#62     Transformer&PolymerTransformer.readPrimaryAsHtml.<anonymous closure> (package:polymer/src/build/common.dart:133:24)
+#63     _rootRunUnary (dart:async/zone.dart:836)
+#64     _CustomZone.runUnary (dart:async/zone.dart:748)
+#65     _Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:488)
+#66     _Future._propagateToListeners (dart:async/future_impl.dart:571)
+#67     _Future._completeWithValue (dart:async/future_impl.dart:331)
+#68     _Future._asyncComplete.<anonymous closure> (dart:async/future_impl.dart:393)
+#69     _rootRun (dart:async/zone.dart:829)
+#70     _CustomZone.run (dart:async/zone.dart:740)
+#71     _CustomZone.runGuarded (dart:async/zone.dart:648)
+#72     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:673)
+#73     _asyncRunCallbackLoop (dart:async/schedule_microtask.dart:41)
+#74     _asyncRunCallback (dart:async/schedule_microtask.dart:48)
+#75     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:126)
+
+#0      _rootHandleUncaughtError.<anonymous closure> (dart:async/zone.dart:820)
+#1      _asyncRunCallbackLoop (dart:async/schedule_microtask.dart:41)
+#2      _asyncRunCallback (dart:async/schedule_microtask.dart:48)
+#3      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:126)
+build.dart finished [3220 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+Unhandled exception:
+Uncaught Error: Converting object to an encodable object failed.
+Stack Trace:
+#0      _JsonStringifier.stringifyValue (dart:convert/json.dart:489)
+#1      _JsonStringifier.stringifyJsonValue.<anonymous closure> (dart:convert/json.dart:543)
+#2      _HashMap&&_LinkedHashMapMixin.forEach (dart:collection-patch/collection_patch.dart:967)
+#3      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:538)
+#4      _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#5      _JsonStringifier.stringifyJsonValue.<anonymous closure> (dart:convert/json.dart:543)
+#6      _HashMap&&_LinkedHashMapMixin.forEach (dart:collection-patch/collection_patch.dart:967)
+#7      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:538)
+#8      _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#9      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:524)
+#10     _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#11     _JsonStringifier.printOn (dart:convert/json.dart:409)
+#12     _JsonStringifier.stringify (dart:convert/json.dart:403)
+#13     JsonEncoder.convert (dart:convert/json.dart:239)
+#14     JsonCodec.encode (dart:convert/json.dart:141)
+#15     _jsonFormatter (package:polymer/src/build/runner.dart:345:21)
+#16     _attachListeners.<anonymous closure> (package:polymer/src/build/runner.dart:216:27)
+#17     _rootRunUnary (dart:async/zone.dart:840)
+#18     _RootZone.runUnaryGuarded (dart:async/zone.dart:1022)
+#19     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#20     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#21     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#22     _BroadcastStreamController.add (dart:async/broadcast_stream_controller.dart:237)
+#23     _onLog (package:barback/src/graph/package_graph.dart:204:25)
+#24     _rootRunUnary (dart:async/zone.dart:840)
+#25     _CustomZone.runUnary (dart:async/zone.dart:748)
+#26     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#27     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#28     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#29     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#30     add (dart:async/broadcast_stream_controller.dart:237)
+#31     _rootRunUnary (dart:async/zone.dart:836)
+#32     _CustomZone.runUnary (dart:async/zone.dart:748)
+#33     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#34     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#35     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#36     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#37     add (dart:async/broadcast_stream_controller.dart:237)
+#38     _rootRunUnary (dart:async/zone.dart:836)
+#39     _CustomZone.runUnary (dart:async/zone.dart:748)
+#40     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#41     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#42     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#43     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#44     add (dart:async/broadcast_stream_controller.dart:237)
+#45     _rootRunUnary (dart:async/zone.dart:836)
+#46     _CustomZone.runUnary (dart:async/zone.dart:748)
+#47     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#48     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#49     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#50     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#51     add (dart:async/broadcast_stream_controller.dart:237)
+#52     _rootRunUnary (dart:async/zone.dart:836)
+#53     _CustomZone.runUnary (dart:async/zone.dart:748)
+#54     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#55     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#56     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#57     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#58     _BroadcastStreamController.add (dart:async/broadcast_stream_controller.dart:237)
+#59     BaseTransform.BaseTransform.<anonymous closure> (package:barback/src/transformer/base_transform.dart:52:27)
+#60     TransformLogger.warning (package:barback/src/transformer/transform_logger.dart:50:17)
+#61     _parseHtml (package:polymer/src/build/common.dart:40:23)
+#62     Transformer&PolymerTransformer.readPrimaryAsHtml.<anonymous closure> (package:polymer/src/build/common.dart:133:24)
+#63     _rootRunUnary (dart:async/zone.dart:836)
+#64     _CustomZone.runUnary (dart:async/zone.dart:748)
+#65     _Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:488)
+#66     _Future._propagateToListeners (dart:async/future_impl.dart:571)
+#67     _Future._completeWithValue (dart:async/future_impl.dart:331)
+#68     _Future._asyncComplete.<anonymous closure> (dart:async/future_impl.dart:393)
+#69     _rootRun (dart:async/zone.dart:829)
+#70     _CustomZone.run (dart:async/zone.dart:740)
+#71     _CustomZone.runGuarded (dart:async/zone.dart:648)
+#72     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:673)
+#73     _asyncRunCallbackLoop (dart:async/schedule_microtask.dart:41)
+#74     _asyncRunCallback (dart:async/schedule_microtask.dart:48)
+#75     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:126)
+
+#0      _rootHandleUncaughtError.<anonymous closure> (dart:async/zone.dart:820)
+#1      _asyncRunCallbackLoop (dart:async/schedule_microtask.dart:41)
+#2      _asyncRunCallback (dart:async/schedule_microtask.dart:48)
+#3      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:126)
+build.dart finished [4827 ms]
+
+---
+build.dart --machine --removed=web/take_photo.dart
+Unhandled exception:
+Uncaught Error: Converting object to an encodable object failed.
+Stack Trace:
+#0      _JsonStringifier.stringifyValue (dart:convert/json.dart:489)
+#1      _JsonStringifier.stringifyJsonValue.<anonymous closure> (dart:convert/json.dart:543)
+#2      _HashMap&&_LinkedHashMapMixin.forEach (dart:collection-patch/collection_patch.dart:967)
+#3      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:538)
+#4      _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#5      _JsonStringifier.stringifyJsonValue.<anonymous closure> (dart:convert/json.dart:543)
+#6      _HashMap&&_LinkedHashMapMixin.forEach (dart:collection-patch/collection_patch.dart:967)
+#7      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:538)
+#8      _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#9      _JsonStringifier.stringifyJsonValue (dart:convert/json.dart:524)
+#10     _JsonStringifier.stringifyValue (dart:convert/json.dart:480)
+#11     _JsonStringifier.printOn (dart:convert/json.dart:409)
+#12     _JsonStringifier.stringify (dart:convert/json.dart:403)
+#13     JsonEncoder.convert (dart:convert/json.dart:239)
+#14     JsonCodec.encode (dart:convert/json.dart:141)
+#15     _jsonFormatter (package:polymer/src/build/runner.dart:345:21)
+#16     _attachListeners.<anonymous closure> (package:polymer/src/build/runner.dart:216:27)
+#17     _rootRunUnary (dart:async/zone.dart:840)
+#18     _RootZone.runUnaryGuarded (dart:async/zone.dart:1022)
+#19     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#20     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#21     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#22     _BroadcastStreamController.add (dart:async/broadcast_stream_controller.dart:237)
+#23     _onLog (package:barback/src/graph/package_graph.dart:204:25)
+#24     _rootRunUnary (dart:async/zone.dart:840)
+#25     _CustomZone.runUnary (dart:async/zone.dart:748)
+#26     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#27     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#28     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#29     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#30     add (dart:async/broadcast_stream_controller.dart:237)
+#31     _rootRunUnary (dart:async/zone.dart:836)
+#32     _CustomZone.runUnary (dart:async/zone.dart:748)
+#33     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#34     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#35     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#36     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#37     add (dart:async/broadcast_stream_controller.dart:237)
+#38     _rootRunUnary (dart:async/zone.dart:836)
+#39     _CustomZone.runUnary (dart:async/zone.dart:748)
+#40     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#41     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#42     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#43     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#44     add (dart:async/broadcast_stream_controller.dart:237)
+#45     _rootRunUnary (dart:async/zone.dart:836)
+#46     _CustomZone.runUnary (dart:async/zone.dart:748)
+#47     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#48     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#49     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#50     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#51     add (dart:async/broadcast_stream_controller.dart:237)
+#52     _rootRunUnary (dart:async/zone.dart:836)
+#53     _CustomZone.runUnary (dart:async/zone.dart:748)
+#54     _CustomZone.runUnaryGuarded (dart:async/zone.dart:656)
+#55     _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:341)
+#56     _BufferingStreamSubscription._add (dart:async/stream_impl.dart:270)
+#57     _SyncBroadcastStreamController._sendData (dart:async/broadcast_stream_controller.dart:346)
+#58     _BroadcastStreamController.add (dart:async/broadcast_stream_controller.dart:237)
+#59     BaseTransform.BaseTransform.<anonymous closure> (package:barback/src/transformer/base_transform.dart:52:27)
+#60     TransformLogger.warning (package:barback/src/transformer/transform_logger.dart:50:17)
+#61     _parseHtml (package:polymer/src/build/common.dart:40:23)
+#62     Transformer&PolymerTransformer.readPrimaryAsHtml.<anonymous closure> (package:polymer/src/build/common.dart:133:24)
+#63     _rootRunUnary (dart:async/zone.dart:836)
+#64     _CustomZone.runUnary (dart:async/zone.dart:748)
+#65     _Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:488)
+#66     _Future._propagateToListeners (dart:async/future_impl.dart:571)
+#67     _Future._completeWithValue (dart:async/future_impl.dart:331)
+#68     _Future._asyncComplete.<anonymous closure> (dart:async/future_impl.dart:393)
+#69     _rootRun (dart:async/zone.dart:829)
+#70     _CustomZone.run (dart:async/zone.dart:740)
+#71     _CustomZone.runGuarded (dart:async/zone.dart:648)
+#72     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:673)
+#73     _asyncRunCallbackLoop (dart:async/schedule_microtask.dart:41)
+#74     _asyncRunCallback (dart:async/schedule_microtask.dart:48)
+#75     _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:126)
+
+#0      _rootHandleUncaughtError.<anonymous closure> (dart:async/zone.dart:820)
+#1      _asyncRunCallbackLoop (dart:async/schedule_microtask.dart:41)
+#2      _asyncRunCallback (dart:async/schedule_microtask.dart:48)
+#3      _RawReceivePortImpl._handleMessage (dart:isolate-patch/isolate_patch.dart:126)
+build.dart finished [3797 ms]
+
+---
+build.dart --machine --removed=web/take_photo.html
+
+build.dart finished [3754 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart --changed=web/take_photo.html
+
+build.dart finished [3328 ms]
+
+---
+build.dart --machine --changed=pubspec.yaml --changed=web/index.html
+
+build.dart finished [3563 ms]
+
+---
+build.dart --machine --changed=web/wephoto.html
+
+build.dart finished [3550 ms]
+
+---
+build.dart --machine --removed=web/index.html
+
+build.dart finished [4080 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.3s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3248 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 1.3s (0.5s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 1.8s (0.7s awaiting secondary inputs)."}}]
+build.dart finished [6350 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.3s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.4s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3307 ms]
+
+---
+build.dart --machine --changed=web/take_photo.html
+[{"method":"info","params":{"message":"Took 0.5s (0.2s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.9s (0.4s awaiting secondary inputs)."}}]
+build.dart finished [5458 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [4363 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3690 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.4s (0.2s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 2.0s (1.7s awaiting secondary inputs)."}}]
+build.dart finished [6570 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3629 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [4751 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.4s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [4628 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3610 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.3s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3318 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [6219 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.6s (0.3s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 1.2s (0.9s awaiting secondary inputs)."}}]
+build.dart finished [6400 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3302 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3422 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.3s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.4s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3237 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3228 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+build.dart finished [3349 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.3s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.4s (0.2s awaiting secondary inputs)."}}]
+build.dart finished [3209 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3514 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3159 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3204 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3240 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.4s (0.2s awaiting secondary inputs)."}}]
+build.dart finished [3166 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.4s (0.2s awaiting secondary inputs)."}}]
+build.dart finished [3118 ms]
+
+---
+build.dart --machine --changed=web/wephoto.html
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3079 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.4s (0.2s awaiting secondary inputs)."}}]
+build.dart finished [6117 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3633 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [4385 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3985 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3280 ms]
+
+---
+build.dart --machine --changed=web/take_photo.html
+[{"method":"info","params":{"message":"Took 0.9s (0.4s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 1.5s (0.9s awaiting secondary inputs)."}}]
+build.dart finished [7707 ms]
+
+---
+build.dart --machine --changed=web/take_photo.html
+
+build.dart finished [3704 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3483 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.2s (0.0s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3580 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [4904 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [5960 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.5s (0.2s awaiting secondary inputs)."}}]
+build.dart finished [3790 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3552 ms]
+
+---
+build.dart --machine --changed=web/take_photo.html
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+build.dart finished [3681 ms]
+
+---
+build.dart --machine --changed=web/foo.dart
+[{"method":"info","params":{"message":"Took 0.4s (0.1s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.8s (0.4s awaiting secondary inputs)."}}]
+build.dart finished [5295 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [8010 ms]
+
+---
+build.dart --machine --changed=web/foo.dart
+[{"method":"info","params":{"message":"Took 0.6s (0.3s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 1.0s (0.5s awaiting secondary inputs)."}}]
+build.dart finished [8068 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.6s (0.3s awaiting secondary inputs)."}}]
+build.dart finished [3925 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [4544 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [3729 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [4635 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 1.2s (0.2s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 1.8s (0.8s awaiting secondary inputs)."}}]
+build.dart finished [13631 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.3s (0.1s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.8s (0.5s awaiting secondary inputs)."}}]
+build.dart finished [6429 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+
+build.dart finished [6359 ms]
+
+---
+build.dart --machine --changed=web/take_photo.dart
+[{"method":"info","params":{"message":"Took 0.6s (0.4s awaiting secondary inputs)."}}]
+[{"method":"info","params":{"message":"Took 0.9s (0.6s awaiting secondary inputs)."}}]
+build.dart finished [9808 ms]
+

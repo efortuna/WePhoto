@@ -6,4 +6,6 @@ dependencies:
     paper_elements: ">=0.1.0 <0.2.0" 
 transformers:
 - polymer:
-    entry_points: web/wephoto.html
+    entry_points:
+    - web/wephoto.html
+    - web/index.html

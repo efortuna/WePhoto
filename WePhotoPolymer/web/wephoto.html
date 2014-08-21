@@ -13,6 +13,7 @@
     <!-- import the click-counter -->
     <link rel="import" href="packages/paper_elements/paper_tabs.html">
     <link rel="import" href="packages/core_elements/core_pages.html">
+    <link rel="import" href="take_photo.html">
     <link rel="import" href="packages/polymer/polymer.html">
     <link rel="stylesheet" href="wephoto.css">
   </head>
@@ -26,7 +27,7 @@
           <paper-tab>Previous Events</paper-tab>
         </paper-tabs>
         <core-pages selected="{{selected}}">
-          <div id="take_photo">Take a photo!</div>
+          <div id="take_photo">Take a photo!<take-photo> </take-photo> </div>
           <div id="gallery">Gallery!</div>
           <div id="events">Events here!</div>
         </core-pages>
