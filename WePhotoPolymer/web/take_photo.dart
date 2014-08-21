@@ -1,8 +1,8 @@
 import 'package:polymer/polymer.dart';
-import 'dart:html';
 import 'google_drive.dart';
 
 import 'dart:html';
+import 'dart:math';
 
 /**
  * A Polymer take-photo element.
@@ -58,10 +58,10 @@ class TakePhoto extends PolymerElement {
      var takePhoto = true;
          
      button.onClick.listen((MouseEvent event) {
-       if (localMediaStream != null && takePhoto) {
-         canvas.width = 640;
-         canvas.height = 480;
-         ctx.drawImageScaled(video, 0, 0, 640, 480);
+       if (localMediaStream != null && takePhoto) { 
+         canvas.width = min(640, video.clientWidth);;
+         canvas.height = ((video.clientHeight / video.clientWidth) * canvas.width).floor();
+         ctx.drawImageScaled(video, 0, 0, canvas.width, canvas.height);
          video.pause();
          button.innerHtml = 'Upload';
          takePhoto = !takePhoto;
