@@ -40,18 +40,24 @@ class TakePhoto extends PolymerElement {
   /// Called when take-photo has been fully prepared (Shadow DOM created, 
   /// property observers set up, event listeners attached).
   ready() {
-    ImageElement img = shadowRoot.querySelector('#imageSrc');
-
     VideoElement video = shadowRoot.querySelector('video');
     CanvasElement canvas = shadowRoot.querySelector('#takenPhoto');
+    ButtonElement button = shadowRoot.querySelector('#accept');
     var ctx = canvas.getContext('2d');
     var localMediaStream = null;
+    var takePhoto = true;
     
-    video.onClick.listen((MouseEvent event) {
-      if (localMediaStream) {
+    button.onClick.listen((MouseEvent event) {
+      if (localMediaStream != null && takePhoto) {
         ctx.drawImage(video, 0, 0);
-        (shadowRoot.querySelector('#imageSrc') as ImageElement).src = canvas.toDataUrl('image/webp');
-        print('on click listened'); // TODO: send this picture off to Google Docs!      
+        video.pause();
+        button.innerHtml = 'Upload';
+        takePhoto = !takePhoto;
+      } else if (!takePhoto) {
+        // TODO: send the picture in "ctx" off to Google Docs!  
+        video.play();
+        button.innerHtml = 'Snap Photo';
+        takePhoto = !takePhoto;
       }
     });
 
