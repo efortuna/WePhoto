@@ -1,5 +1,10 @@
 <!-- import polymer-element's definition -->
 <link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/paper_elements/paper_tabs.html">
+<link rel="import" href="packages/core_elements/core_pages.html">
+<link rel="import" href="take_photo.html">
+<link rel="import" href="previous_events.html">
+<link rel="import" href="event_gallery.html">
 <polymer-element name="we-photo" attributes="selected">
   <template>
     <link rel="stylesheet" href="we_photo.css">
@@ -9,9 +14,9 @@
       <paper-tab>Previous Events</paper-tab>
     </paper-tabs>
     <core-pages selected="{{selected}}">
-      <div id="take_photo">Take a photo!</div>
-      <div id="gallery">Gallery!</div>
-      <div id="events">Events here!</div>
+      <take-photo></take-photo>
+      <event-gallery></event-gallery>
+      <previous-events></previous-events>
     </core-pages>
   </template>
   <script type="application/dart" src="we_photo.dart"></script>
