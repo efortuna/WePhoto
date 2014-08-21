@@ -42,39 +42,22 @@ class TakePhoto extends PolymerElement {
   ready() {
     ImageElement img = shadowRoot.querySelector('#imageSrc');
 
-    /*window.navigator.getUserMedia(video: true).then((stream) {
-        var url = Url.createObjectUrl(stream);
-        var video = new VideoElement()
-          ..autoplay = true;
-        document.body.append(video);
-        video.src = url;
-        document.query('#stopRtcDemo').onMouseDown.listen(
-            (evt) { video.pause(); video.src = ''; stream.stop();});
-      });*/
-    
-    
-    
-    
     VideoElement video = shadowRoot.querySelector('video');
     CanvasElement canvas = shadowRoot.querySelector('#takenPhoto');
     var ctx = canvas.getContext('2d');
     var localMediaStream = null;
     
     video.onClick.listen((MouseEvent event) {
-      print('on click listened');
       if (localMediaStream) {
         ctx.drawImage(video, 0, 0);
-        // "image/webp" works in Chrome.
-        // Other browsers will fall back to image/png.
         (shadowRoot.querySelector('#imageSrc') as ImageElement).src = canvas.toDataUrl('image/webp');
+        print('on click listened'); // TODO: send this picture off to Google Docs!      
       }
     });
 
-    // Not showing vendor prefixes or code that works cross-browser.
     window.navigator.getUserMedia(video: true).then((aStream) {
       video.src = Url.createObjectUrl(aStream); 
       localMediaStream = aStream;
     }).catchError((error) => print('there was an error $error')); 
   }
-  
 }

@@ -10,30 +10,11 @@
     <script src="packages/web_components/platform.js"></script>
     <script src="packages/web_components/dart_support.js"></script>
 
-    <!-- import the click-counter -->
-    <link rel="import" href="packages/paper_elements/paper_tabs.html">
-    <link rel="import" href="packages/core_elements/core_pages.html">
-    <link rel="import" href="take_photo.html">
-    <link rel="import" href="packages/polymer/polymer.html">
+    <link rel="import" href="we_photo.html">
     <link rel="stylesheet" href="wephoto.css">
   </head>
   <body>
-    
-    <polymer-element name="we-photo" attributes="selected" noscript>
-      <template>
-        <paper-tabs selected="{{selected}}">
-          <paper-tab>Camera</paper-tab>
-          <paper-tab>Gallery</paper-tab>
-          <paper-tab>Previous Events</paper-tab>
-        </paper-tabs>
-        <core-pages selected="{{selected}}">
-          <div id="take_photo">Take a photo!<take-photo> </take-photo> </div>
-          <div id="gallery">Gallery!</div>
-          <div id="events">Events here!</div>
-        </core-pages>
-      </template>
-    </polymer-element>
-    
+
     <we-photo selected="0"></we-photo>
 
     <!-- bootstrap polymer -->
