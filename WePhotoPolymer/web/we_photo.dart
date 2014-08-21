@@ -1,5 +1,7 @@
 import 'package:polymer/polymer.dart';
 
+import 'dart:html';
+
 /**
  * A Polymer we-photo element.
  */
