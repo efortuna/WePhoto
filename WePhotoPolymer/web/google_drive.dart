@@ -24,7 +24,7 @@ class GoogleDrive {
   /**
    * Called when authorization server replies with a token.
    */
-  void oauthReady(token) {
+  void oauthReady(Token token) {
     _driveToken = token;
     _driveCompleter.complete(_drive);
     print('OAuth complete: $token');
