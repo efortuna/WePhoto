@@ -1,5 +1,6 @@
 import 'package:polymer/polymer.dart';
 import 'dart:html';
+import 'google_drive.dart';
 
 import 'dart:html';
 
@@ -33,7 +34,10 @@ class TakePhoto extends PolymerElement {
   /// take-photo is added, changed, or removed.
   attributeChanged(String name, String oldValue, String newValue) {
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> can upload photos
    
   */
 
@@ -52,15 +56,27 @@ class TakePhoto extends PolymerElement {
      var ctx = canvas.getContext('2d');
      var localMediaStream = null;
      var takePhoto = true;
-    
+         
      button.onClick.listen((MouseEvent event) {
        if (localMediaStream != null && takePhoto) {
-         ctx.drawImage(video, 0, 0);
+         canvas.width = 640;
+         canvas.height = 480;
+         ctx.drawImageScaled(video, 0, 0, 640, 480);
          video.pause();
          button.innerHtml = 'Upload';
          takePhoto = !takePhoto;
        } else if (!takePhoto) {
-         // TODO: send the picture in "ctx" off to Google Docs!  
+         // TODO: send the picture in "ctx" off to Google Docs!
+         new GoogleDrive().uploadDrive.then((drive) {
+           var params = {};
+           drive.upload('files', 'POST',  
+               '{"title": "${new DateTime.now().millisecondsSinceEpoch}"}',
+               canvas.toDataUrl().split(',')[1],
+               'multipart/related;', queryParams: params).then((response) {
+             print(response);
+           });
+         });
+         
          video.play();
          button.innerHtml = 'Snap Photo';
          takePhoto = !takePhoto;

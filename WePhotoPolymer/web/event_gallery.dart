@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:polymer/polymer.dart';
 import 'google_drive.dart';
 
@@ -13,7 +12,6 @@ class EventGallery extends PolymerElement {
   EventGallery.created() : super.created() {
     new GoogleDrive().drive.then((drive) {
       var params = {
-          'access_token': drive.auth.token.data,
           'q': 'trashed = false and not mimeType contains "folder"'
       };
       drive.request('files', 'GET', queryParams: params).then((response) {
