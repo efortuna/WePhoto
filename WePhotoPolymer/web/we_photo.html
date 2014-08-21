@@ -1,0 +1,18 @@
+<!-- import polymer-element's definition -->
+<link rel="import" href="packages/polymer/polymer.html">
+<polymer-element name="we-photo" attributes="selected">
+  <template>
+    <link rel="stylesheet" href="we_photo.css">
+    <paper-tabs selected="{{selected}}">
+      <paper-tab>Camera</paper-tab>
+      <paper-tab>Gallery</paper-tab>
+      <paper-tab>Previous Events</paper-tab>
+    </paper-tabs>
+    <core-pages selected="{{selected}}">
+      <div id="take_photo">Take a photo!</div>
+      <div id="gallery">Gallery!</div>
+      <div id="events">Events here!</div>
+    </core-pages>
+  </template>
+  <script type="application/dart" src="we_photo.dart"></script>
+</polymer-element>
