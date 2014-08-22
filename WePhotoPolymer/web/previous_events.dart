@@ -1,6 +1,7 @@
 import 'package:polymer/polymer.dart';
 import 'google_drive.dart';
 import 'package:core_elements/core_selector.dart';
+import 'package:paper_elements/paper_input.dart';
 
 /**
  * A Polymer previous-events element.
@@ -17,16 +18,30 @@ class PreviousEvents extends PolymerElement {
   }
   
   ready() {
-    this.$['eventSelector'].on['core-select'].listen((e) {
+    this.$['eventSelector'].on['core-select'].listen((_) {
       if (events == null) return;
       var selected = (this.$['eventSelector'] as CoreSelector).selected;
       if (selected is String) selected = int.parse(selected);
       currentEventId = events[selected]['id'];
       currentEventName = events[selected]['title'];
     });
+    
+    this.$['createEvent'].on['click'].listen((_) {
+      this.$['createDialog'].toggle();
+    });
+    
+    this.$['createDialog'].on['core-overlay-open'].listen((_) {
+      this.$['eventName'].focus();
+    });
+    
+    this.$['saveEvent'].on['click'].listen((_) {
+      createEvent((this.$['eventName'] as PaperInput).value);
+      this.$['createDialog'].toggle();
+    });
   }
   
   refreshEvents() {
+    var oldEventId = currentEventId;
     events = null;
     currentEventId = null;
     new GoogleDrive().drive.then((drive) {
@@ -42,6 +57,21 @@ class PreviousEvents extends PolymerElement {
         events = items.map((item) =>
           {'id': item['id'], 'title': item['title']}).toList();
         currentEventId = events[0]['id'];
+      });
+    });
+  }
+  
+  createEvent(String eventName) {
+    new GoogleDrive().drive.then((drive) {
+      var params = {};
+      drive.request(
+          'files', 'POST',  
+          body: '{'
+                ' title: "$eventName", '
+                ' mimeType: "application/vnd.google-apps.folder"'
+                '}', 
+          queryParams: params).then((response) {
+        refreshEvents();
       });
     });
   }

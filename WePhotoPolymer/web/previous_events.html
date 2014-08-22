@@ -1,5 +1,8 @@
 <!-- import polymer-element's definition -->
 <link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/paper_elements/paper_button.html">
+<link rel="import" href="packages/paper_elements/paper_dialog.html">
+<link rel="import" href="packages/paper_elements/paper_input.html">
 <link rel="import" href="packages/core_elements/core_selector.html">
 <link rel="import" href="packages/core_elements/core_item.html">
 <polymer-element name="previous-events" attributes="currentEventId currentEventName">
@@ -16,8 +19,20 @@
       core-selector :last-child {
         border-bottom: none;
       }
+      paper-button {
+        background-color: #ccc;
+      }
+      paper-dialog paper-button {
+        display: block;
+        background-color: #F8F8F8;
+      }
     </style>
     <!-- template content here -->
+    <paper-button id="createEvent" label="Create event"></paper-button>
+    <paper-dialog id="createDialog" backdrop>
+        <paper-input label="Event Name" id="eventName" required></paper-input><br />
+        <paper-button id="saveEvent" label="Save event"></paper-button>
+    </paper-dialog>
     <core-selector id="eventSelector" selected="0">
       <template repeat="{{event in events}}">
         <core-item>{{event['title']}}</core-item>
