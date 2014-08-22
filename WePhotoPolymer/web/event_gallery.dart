@@ -10,14 +10,25 @@ class EventGallery extends PolymerElement {
 
   /// Constructor used to create instance of EventGallery.
   EventGallery.created() : super.created() {
+    refreshImages();
+  }
+  
+  ready() {
+    this.$['refresh'].on['click'].listen((_) {
+      print('here');
+      refreshImages();
+    });
+  }
+  
+  refreshImages() {
+    photos = [];
     new GoogleDrive().drive.then((drive) {
       var params = {
           'q': 'trashed = false and not mimeType contains "folder"'
       };
       drive.request('files', 'GET', queryParams: params).then((response) {
-        photos = response['items'].map((item) => item['thumbnailLink']);
+        photos = response['items'].map((item) => item['thumbnailLink']).toList();
       });
     });
   }
-  
 }
