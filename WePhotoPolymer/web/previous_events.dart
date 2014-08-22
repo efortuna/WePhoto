@@ -38,10 +38,13 @@ class PreviousEvents extends PolymerElement {
       createEvent((this.$['eventName'] as PaperInput).value);
       this.$['createDialog'].toggle();
     });
+    
+    this.$['refresh'].on['click'].listen((_) {
+      refreshEvents();
+    });
   }
   
   refreshEvents() {
-    var oldEventId = currentEventId;
     events = null;
     currentEventId = null;
     new GoogleDrive().drive.then((drive) {

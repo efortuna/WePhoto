@@ -1,7 +1,5 @@
 import 'package:polymer/polymer.dart';
 
-import 'dart:html';
-
 /**
  * A Polymer we-photo element.
  */
@@ -21,7 +19,9 @@ class WePhoto extends PolymerElement {
       firstSelectedEvent = false;
       return;
     }
-    this.$['pages'].selected = 1;
+    // TODO: fix the behavior here, we don't actually want to always change here, only if
+    // somebody actually clicks on an event in the events page.
+//    this.$['pages'].selected = 1;
   }
 
   /*
