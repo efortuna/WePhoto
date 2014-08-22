@@ -183,6 +183,52 @@ public class WePhotoMainActivity extends FragmentActivity implements
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
     }
 
+
+    /**
+     * Create a new file and save it to Drive.
+     */
+    public void saveImageBytesToDrive(final byte[] data, final String filePath) {
+        // Start by creating a new contents, and setting a callback.
+        Log.i(TAG, "Creating new contents.");
+        Drive.DriveApi.newContents(mGoogleApiClient).setResultCallback(
+                new ResultCallback<DriveApi.ContentsResult>() {
+                    @Override
+                    public void onResult(DriveApi.ContentsResult result) {
+                        // If the operation was not successful, we cannot do anything and must fail.
+                        if (!result.getStatus().isSuccess()) {
+                            Log.e(TAG, "Failed to create new contents.");
+                            return;
+                        }
+                        // Otherwise, we can write our data to the new contents.
+                        Log.i(TAG, "New contents created.");
+                        // Get an output stream for the contents.
+                        OutputStream outputStream = result.getContents().getOutputStream();
+                        try {
+                            outputStream.write(data);
+                        } catch (IOException e1) {
+                            Log.e(TAG, "Unable to write file contents.");
+                        }
+                        // Create the initial metadata - MIME type and title.
+                        // Note that the user will be able to change the title later.
+                        MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                                .setMimeType("image/png").setTitle(filePath).build();
+                        // Create an intent for the file chooser, and start it.
+                        IntentSender intentSender = Drive.DriveApi
+                                .newCreateFileActivityBuilder()
+                                .setInitialMetadata(metadataChangeSet)
+                                .setInitialContents(result.getContents())
+                                .build(mGoogleApiClient);
+                        try {
+                            startIntentSenderForResult(
+                                    intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.i(TAG, "Failed to launch file chooser.");
+                        }
+                    }
+                });
+    }
+
+
     /**
      * Create a new file and save it to Drive.
      */

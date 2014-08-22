@@ -12,13 +12,16 @@
         android:textSize="20dp"
         android:layout_centerInParent="true"/>-->
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_above="@+id/buttons"
+    <RelativeLayout android:id ="@+id/selfView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerInside"
-        />
+        android:layout_height="fill_parent" />
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_above="@+id/buttons"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:scaleType="centerInside"-->
+        <!--/>-->
 
     <LinearLayout
         android:id="@+id/buttons"
