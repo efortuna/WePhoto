@@ -2,14 +2,20 @@
 <link rel="import" href="packages/polymer/polymer.html">
 <link rel="import" href="packages/paper_elements/paper_icon_button.html">
 <link rel="import" href="packages/core_elements/core_icons.html">
+<link href="http://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet" type="text/css">
 <polymer-element name="event-gallery" attributes="currentEventId">
   <template>
     <link rel="stylesheet" href="event_gallery.css">
     <paper-icon-button id="refresh" icon="refresh"></paper-icon-button>
     <div>
-      <template repeat="{{photo in photos}}">
-        <img _src="{{photo}}" />
+    <center>
+      <template repeat="{{photo in photos | enumerate}}">
+        <div class="polaroid">
+            <p>Photo {{photo.index}}</p>
+            <img _src="{{photo.value}}" />
+        </div>
       </template>
+      </center>
     </div>
   </template>
   <script type="application/dart" src="event_gallery.dart"></script>
