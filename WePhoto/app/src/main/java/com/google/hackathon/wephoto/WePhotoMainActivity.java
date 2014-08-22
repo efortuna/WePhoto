@@ -208,22 +208,15 @@ public class WePhotoMainActivity extends FragmentActivity implements
                         } catch (IOException e1) {
                             Log.e(TAG, "Unable to write file contents.");
                         }
-                        // Create the initial metadata - MIME type and title.
-                        // Note that the user will be able to change the title later.
-                        MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                                .setMimeType("image/png").setTitle(filePath).build();
-                        // Create an intent for the file chooser, and start it.
-                        IntentSender intentSender = Drive.DriveApi
-                                .newCreateFileActivityBuilder()
-                                .setInitialMetadata(metadataChangeSet)
-                                .setInitialContents(result.getContents())
-                                .build(mGoogleApiClient);
-                        try {
-                            startIntentSenderForResult(
-                                    intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0);
-                        } catch (IntentSender.SendIntentException e) {
-                            Log.i(TAG, "Failed to launch file chooser.");
-                        }
+
+
+
+                        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                                .setTitle("New file")
+                                .setMimeType("text/plain").build();
+                        // Create a file in the root folder
+                        Drive.DriveApi.getRootFolder(mGoogleApiClient)
+                                .createFile(mGoogleApiClient, changeSet, result.getContents());
                     }
                 });
     }
