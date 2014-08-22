@@ -2,21 +2,23 @@
 <link rel="import" href="packages/polymer/polymer.html">
 <link rel="import" href="packages/paper_elements/paper_tabs.html">
 <link rel="import" href="packages/core_elements/core_pages.html">
+<link rel="import" href="packages/core_elements/core_toolbar.html">
 <link rel="import" href="take_photo.html">
 <link rel="import" href="previous_events.html">
 <link rel="import" href="event_gallery.html">
-<polymer-element name="we-photo" attributes="selected">
+<polymer-element name="we-photo" attributes="selected currentEventId currentEventName">
   <template>
     <link rel="stylesheet" href="we_photo.css">
+    <core-toolbar>{{currentEventName}}</core-toolbar>
     <paper-tabs selected="{{selected}}">
       <paper-tab>Camera</paper-tab>
       <paper-tab>Gallery</paper-tab>
-      <paper-tab>Previous Events</paper-tab>
+      <paper-tab>Events</paper-tab>
     </paper-tabs>
-    <core-pages selected="{{selected}}">
-      <take-photo></take-photo>
-      <event-gallery></event-gallery>
-      <previous-events></previous-events>
+    <core-pages id="pages" selected="{{selected}}">
+      <take-photo currentEventId="{{currentEventId}}"></take-photo>
+      <event-gallery currentEventId="{{currentEventId}}"></event-gallery>
+      <previous-events currentEventId="{{currentEventId}}" currentEventName="{{currentEventName}}"></previous-events>
     </core-pages>
   </template>
   <script type="application/dart" src="we_photo.dart"></script>

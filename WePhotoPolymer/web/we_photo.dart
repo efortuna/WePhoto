@@ -8,9 +8,20 @@ import 'dart:html';
 @CustomTag('we-photo')
 class WePhoto extends PolymerElement {
   @published int selected = 0;
+  @published String currentEventId;
+  @published String currentEventName;
+  bool firstSelectedEvent = true;
 
   /// Constructor used to create instance of WePhoto.
   WePhoto.created() : super.created() {
+  }
+  
+  currentEventIdChanged() {
+    if (firstSelectedEvent) {
+      firstSelectedEvent = false;
+      return;
+    }
+    this.$['pages'].selected = 1;
   }
 
   /*

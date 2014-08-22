@@ -1,12 +1,28 @@
 <!-- import polymer-element's definition -->
 <link rel="import" href="packages/polymer/polymer.html">
-<polymer-element name="previous-events">
+<link rel="import" href="packages/core_elements/core_selector.html">
+<link rel="import" href="packages/core_elements/core_item.html">
+<polymer-element name="previous-events" attributes="currentEventId currentEventName">
   <template>
     <style>
-      <!-- template styling here -->
+      core-item {
+        border-bottom: solid 1px #ccc;
+        padding: 0px 10px;
+        cursor: pointer;
+      }
+      core-item.core-selected {
+        background: #eee;
+      }
+      core-selector :last-child {
+        border-bottom: none;
+      }
     </style>
     <!-- template content here -->
-    Events here!
+    <core-selector id="eventSelector" selected="0">
+      <template repeat="{{event in events}}">
+        <core-item>{{event['title']}}</core-item>
+      </template>
+    </core-selector>
   </template>
   <script type="application/dart" src="previous_events.dart"></script>
 </polymer-element>

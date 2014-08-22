@@ -6,3 +6,7 @@ paper-tabs {
 core-pages > * {
   padding: 10px;
 }
+
+core-toolbar {
+  text-align: center;
+}

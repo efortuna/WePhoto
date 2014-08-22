@@ -10,6 +10,7 @@ import 'dart:math';
  */
 @CustomTag('take-photo')
 class TakePhoto extends PolymerElement {
+  @published String currentEventId;
 
   /// Constructor used to create instance of TakePhoto.
   TakePhoto.created() : super.created() {
