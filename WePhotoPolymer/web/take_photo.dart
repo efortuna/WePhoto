@@ -63,9 +63,8 @@ class TakePhoto extends PolymerElement {
          canvas.height = ((video.clientHeight / video.clientWidth) * canvas.width).floor();
          ctx.drawImageScaled(video, 0, 0, canvas.width, canvas.height);
          video.pause();
-         button.innerHtml = 'Upload';
-         takePhoto = !takePhoto;
-       } else if (!takePhoto) {
+         button.innerHtml = 'Uploading...';
+         takePhoto = false;
          // TODO: send the picture in "ctx" off to Google Docs!
          new GoogleDrive().uploadDrive.then((drive) {
            var params = {};
@@ -73,13 +72,13 @@ class TakePhoto extends PolymerElement {
                '{"title": "${new DateTime.now().millisecondsSinceEpoch}"}',
                canvas.toDataUrl().split(',')[1],
                'multipart/related;', queryParams: params).then((response) {
+             // Restore the button to its original state and let you take more photos.
+             video.play();
+             button.innerHtml = 'Snap Photo';
+             takePhoto = true;
              print(response);
            });
          });
-         
-         video.play();
-         button.innerHtml = 'Snap Photo';
-         takePhoto = !takePhoto;
        }
      });
 
