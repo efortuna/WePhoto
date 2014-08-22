@@ -30,7 +30,6 @@
       }
     </style>
     <!-- template content here -->
-    <paper-button id="createEvent" label="Create event"></paper-button>
     <paper-dialog id="createDialog" backdrop>
         <paper-input label="Event Name" id="eventName" required></paper-input><br />
         <paper-button id="saveEvent" label="Save event"></paper-button>
@@ -40,6 +39,7 @@
         <core-item>{{event['title']}}</core-item>
       </template>
     </core-selector>
+    <paper-button id="createEvent" label="Create event"></paper-button>
   </template>
   <script type="application/dart" src="previous_events.dart"></script>
 </polymer-element>
