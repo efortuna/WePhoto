@@ -54,19 +54,19 @@ class TakePhoto extends PolymerElement {
 
      VideoElement video = shadowRoot.querySelector('video');
      CanvasElement canvas = shadowRoot.querySelector('#takenPhoto');
-     PaperButton button = shadowRoot.querySelector('#accept');
+//     PaperButton button = shadowRoot.querySelector('#accept');
      var ctx = canvas.getContext('2d');
      var localMediaStream = null;
      var takePhoto = true;
          
-     button.on['click'].listen((MouseEvent event) {
+     video.on['click'].listen((MouseEvent event) {
        if (localMediaStream != null && takePhoto) { 
          canvas.width = min(640, video.clientWidth);
          canvas.height = ((video.clientHeight / video.clientWidth) * canvas.width).floor();
          ctx.drawImageScaled(video, 0, 0, canvas.width, canvas.height);
          video.pause();
-         button.label = 'Uploading...';
-         button.disabled = true;
+//         button.label = 'Uploading...';
+//         button.disabled = true;
          takePhoto = false;
          // TODO: send the picture in "ctx" off to Google Docs!
          new GoogleDrive().uploadDrive.then((drive) {
@@ -80,8 +80,8 @@ class TakePhoto extends PolymerElement {
                'multipart/related;', queryParams: params).then((response) {
              // Restore the button to its original state and let you take more photos.
              video.play();
-             button.label = 'Snap Photo';
-             button.disabled = false;
+//             button.label = 'Snap Photo';
+//             button.disabled = false;
              takePhoto = true;
            });
          });
