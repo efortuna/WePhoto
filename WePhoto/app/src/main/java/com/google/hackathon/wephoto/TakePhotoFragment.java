@@ -18,13 +18,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.util.Date;
 
 public class TakePhotoFragment extends Fragment {
 
     private static final String TAG = TakePhotoFragment.class.getSimpleName();
     private static final int ACTIVITY_REQUEST_CAPTURE = 1;
-    private static final String PREFS_SNAP_NUMBER = "snapNumber";
-    private int snapNumber;
+    private long snapNumber;
     private Bitmap currentBitmap;
 
     @Override
@@ -56,7 +56,6 @@ public class TakePhotoFragment extends Fragment {
 
     protected void updateState() {
         SharedPreferences prefs = getActivity().getPreferences(Activity.MODE_PRIVATE);
-        snapNumber = prefs.getInt(PREFS_SNAP_NUMBER, 0);
     }
 
     public void snapPicture(View view) {
@@ -67,11 +66,7 @@ public class TakePhotoFragment extends Fragment {
         startActivityForResult(intent, ACTIVITY_REQUEST_CAPTURE);
     }
     protected void bumpSnapfile() {
-        snapNumber += 1;
-        SharedPreferences prefs = getActivity().getPreferences(Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(PREFS_SNAP_NUMBER, snapNumber);
-        editor.commit();
+        snapNumber = new Date().getTime();
     }
 
     @Override
@@ -132,7 +127,7 @@ public class TakePhotoFragment extends Fragment {
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 getString(R.string.pictureFolder));
         snapDir.mkdirs();
-        File snapFile = new File(snapDir, String.format("snap-%04d.png", snapNumber));
+        File snapFile = new File(snapDir, String.format("%d.png", snapNumber));
         Log.i(TAG, "Snapshot path: " + snapFile.getAbsolutePath());
         return snapFile;
     }
