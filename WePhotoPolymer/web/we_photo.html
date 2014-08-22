@@ -6,19 +6,23 @@
 <link rel="import" href="take_photo.html">
 <link rel="import" href="previous_events.html">
 <link rel="import" href="event_gallery.html">
+<link href='http://fonts.googleapis.com/css?family=Julius+Sans+One' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Unkempt' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Carme' rel='stylesheet' type='text/css'>
+
 <polymer-element name="we-photo" attributes="selected currentEventId currentEventName">
   <template>
     <link rel="stylesheet" href="we_photo.css">
-    <core-toolbar>{{currentEventName}}</core-toolbar>
-    <paper-tabs selected="{{selected}}">
-      <paper-tab>Camera</paper-tab>
-      <paper-tab>Gallery</paper-tab>
-      <paper-tab>Events</paper-tab>
+    <core-toolbar style="background-color: #2f869c; font-family: 'Unkempt', cursive; color:  #CEF0D4; font-weight: bold; text-shadow: 1px 1px 2px #082b34;">{{currentEventName}}</core-toolbar>
+    <paper-tabs selected="{{selected}}" >
+      <paper-tab style="font-family: 'Julius Sans One', cursive;" >Camera</paper-tab>
+      <paper-tab style="font-family: 'Julius Sans One', cursive;" >Gallery</paper-tab>
+      <paper-tab style="font-family: 'Julius Sans One', cursive;" >Events</paper-tab>
     </paper-tabs>
     <core-pages id="pages" selected="{{selected}}">
       <take-photo currentEventId="{{currentEventId}}"></take-photo>
       <event-gallery currentEventId="{{currentEventId}}"></event-gallery>
-      <previous-events currentEventId="{{currentEventId}}" currentEventName="{{currentEventName}}"></previous-events>
+      <previous-events currentEventId="{{currentEventId}}" style="font-family: 'Carme', sans-serif;" currentEventName="{{currentEventName}}"></previous-events>
     </core-pages>
   </template>
   <script type="application/dart" src="we_photo.dart"></script>
