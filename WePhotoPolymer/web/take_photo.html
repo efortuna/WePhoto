@@ -1,5 +1,6 @@
 <!-- import polymer-element's definition -->
 <link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/paper_elements/paper_button.html">
 
 <polymer-element name="take-photo">
   <template>
@@ -8,8 +9,11 @@
         width: 100%;
         height: auto;
       }
+      paper-button {
+        background: #ccc;
+      }
     </style>
-     <button id="accept">Snap Photo</button>
+    <paper-button label="Snap Photo" id="accept"></paper-button>
     <video autoplay id="cameraVideo"></video>
     <canvas style="display:none;" id="takenPhoto"></canvas>
 
