@@ -59,7 +59,7 @@ class TakePhoto extends PolymerElement {
          
      button.onClick.listen((MouseEvent event) {
        if (localMediaStream != null && takePhoto) { 
-         canvas.width = min(640, video.clientWidth);;
+         canvas.width = min(640, video.clientWidth);
          canvas.height = ((video.clientHeight / video.clientWidth) * canvas.width).floor();
          ctx.drawImageScaled(video, 0, 0, canvas.width, canvas.height);
          video.pause();
