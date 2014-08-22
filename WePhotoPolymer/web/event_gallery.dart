@@ -1,3 +1,5 @@
+library WePhoto.EventGallery;
+
 import 'package:polymer/polymer.dart';
 import 'google_drive.dart';
 
@@ -11,20 +13,14 @@ class EventGallery extends PolymerElement {
 
   /// Constructor used to create instance of EventGallery.
   EventGallery.created() : super.created() {
-    refreshImages();
-  }
-  
-  ready() {
-    this.$['refresh'].on['click'].listen((_) {
-      refreshImages();
-    });
+    refresh();
   }
   
   currentEventIdChanged(oldValue, newValue) {
-    refreshImages();
+    refresh();
   }
   
-  refreshImages() {
+  refresh() {
     if (currentEventId == null) return;
     photos = [];
     new GoogleDrive().drive.then((drive) {

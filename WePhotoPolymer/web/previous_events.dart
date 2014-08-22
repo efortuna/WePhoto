@@ -1,3 +1,5 @@
+library WePhoto.PreviousEvents;
+
 import 'package:polymer/polymer.dart';
 import 'google_drive.dart';
 import 'package:core_elements/core_selector.dart';
@@ -14,7 +16,7 @@ class PreviousEvents extends PolymerElement {
 
   /// Constructor used to create instance of EventGallery.
   PreviousEvents.created() : super.created() {
-    refreshEvents();
+    refresh();
   }
   
   ready() {
@@ -38,13 +40,9 @@ class PreviousEvents extends PolymerElement {
       createEvent((this.$['eventName'] as PaperInput).value);
       this.$['createDialog'].toggle();
     });
-    
-    this.$['refresh'].on['click'].listen((_) {
-      refreshEvents();
-    });
   }
   
-  refreshEvents() {
+  refresh() {
     events = null;
     currentEventId = null;
     new GoogleDrive().drive.then((drive) {
@@ -74,7 +72,7 @@ class PreviousEvents extends PolymerElement {
                 ' mimeType: "application/vnd.google-apps.folder"'
                 '}', 
           queryParams: params).then((response) {
-        refreshEvents();
+        refresh();
       });
     });
   }

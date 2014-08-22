@@ -10,3 +10,7 @@ core-pages > * {
 core-toolbar {
   text-align: center;
 }
+
+core-toolbar div {
+  text-align: left;
+}

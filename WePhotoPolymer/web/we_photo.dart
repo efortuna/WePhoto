@@ -1,4 +1,7 @@
 import 'package:polymer/polymer.dart';
+import 'package:core_elements/core_selector.dart';
+import 'previous_events.dart';
+import 'event_gallery.dart';
 
 /**
  * A Polymer we-photo element.
@@ -8,10 +11,15 @@ class WePhoto extends PolymerElement {
   @published int selected = 0;
   @published String currentEventId;
   @published String currentEventName;
+  @observable bool showRefresh = false;
   bool firstSelectedEvent = true;
 
   /// Constructor used to create instance of WePhoto.
   WePhoto.created() : super.created() {
+  }
+  
+  refresh() {
+    (this.$['pages'] as CoreSelector).selectedItem.refresh();
   }
   
   currentEventIdChanged() {
@@ -22,6 +30,13 @@ class WePhoto extends PolymerElement {
     // TODO: fix the behavior here, we don't actually want to always change here, only if
     // somebody actually clicks on an event in the events page.
 //    this.$['pages'].selected = 1;
+  }
+  
+  selectedChanged(oldValue, newValue) {
+    CoreSelector pages = this.$['pages'];
+    if (pages == null) return;
+    var selected = pages.children[newValue];
+    showRefresh = (selected is PreviousEvents) || (selected is EventGallery);
   }
 
   /*

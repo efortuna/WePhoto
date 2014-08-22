@@ -1,5 +1,7 @@
 <!-- import polymer-element's definition -->
 <link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/paper_elements/paper_icon_button.html">
+<link rel="import" href="packages/core_elements/core_icons.html">
 <link rel="import" href="packages/paper_elements/paper_tabs.html">
 <link rel="import" href="packages/core_elements/core_pages.html">
 <link rel="import" href="packages/core_elements/core_toolbar.html">
@@ -13,7 +15,12 @@
 <polymer-element name="we-photo" attributes="selected currentEventId currentEventName">
   <template>
     <link rel="stylesheet" href="we_photo.css">
-    <core-toolbar style="background-color: #2f869c; font-family: 'Unkempt', cursive; color:  #CEF0D4; font-weight: bold; text-shadow: 1px 1px 2px #082b34;">{{currentEventName}}</core-toolbar>
+    <core-toolbar style="background-color: #2f869c; font-family: 'Unkempt', cursive; color:  #CEF0D4; font-weight: bold; text-shadow: 1px 1px 2px #082b34;">
+      <div flex>{{currentEventName}}</div>
+      <template if="{{showRefresh}}">
+        <paper-icon-button id="refresh" icon="refresh" on-click={{refresh}}></paper-icon-button>
+      </template>
+    </core-toolbar>
     <paper-tabs selected="{{selected}}" >
       <paper-tab style="font-family: 'Julius Sans One', cursive;" >Camera</paper-tab>
       <paper-tab style="font-family: 'Julius Sans One', cursive;" >Gallery</paper-tab>
