@@ -72,7 +72,10 @@ class TakePhoto extends PolymerElement {
          new GoogleDrive().uploadDrive.then((drive) {
            var params = {};
            drive.upload('files', 'POST',  
-               '{"title": "${new DateTime.now().millisecondsSinceEpoch}"}',
+               '{'
+               ' title: "${new DateTime.now().millisecondsSinceEpoch}", '
+               ' parents: [{id: "$currentEventId"}]'
+               '}',
                canvas.toDataUrl().split(',')[1],
                'multipart/related;', queryParams: params).then((response) {
              // Restore the button to its original state and let you take more photos.
@@ -80,7 +83,6 @@ class TakePhoto extends PolymerElement {
              button.label = 'Snap Photo';
              button.disabled = false;
              takePhoto = true;
-             print(response);
            });
          });
        }
