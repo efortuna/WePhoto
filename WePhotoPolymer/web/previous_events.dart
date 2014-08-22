@@ -34,7 +34,12 @@ class PreviousEvents extends PolymerElement {
           'q': 'trashed = false and mimeType contains "folder"'
       };
       drive.request('files', 'GET', queryParams: params).then((response) {
-        events = response['items'].map((item) =>
+        var items = response['items'];
+        items.sort((a, b) => 
+                DateTime.parse(b['createdDate']).millisecondsSinceEpoch 
+                - DateTime.parse(a['createdDate']).millisecondsSinceEpoch);
+        
+        events = items.map((item) =>
           {'id': item['id'], 'title': item['title']}).toList();
         currentEventId = events[0]['id'];
       });
